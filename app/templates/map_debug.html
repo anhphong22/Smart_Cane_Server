@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bảng điều khiển | Theo dõi Gậy thông minh (DEBUG)</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .debug-panel { background: #f0f0f0; padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .status { padding: 5px; margin: 5px 0; border-radius: 3px; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .info { background: #d1ecf1; color: #0c5460; }
+        #map { height: 400px; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <h1>Smart Cane Dashboard (DEBUG)</h1>
+    
+    <div class="debug-panel">
+        <h3>Device Status</h3>
+        <div id="status-text">Đang kiểm tra...</div>
+        <div><strong>Vĩ độ:</strong> <span id="latitude-value">N/A</span></div>
+        <div><strong>Kinh độ:</strong> <span id="longitude-value">N/A</span></div>
+        <div><strong>Thời gian:</strong> <span id="time-value">N/A</span></div>
+    </div>
+
+    <div class="debug-panel">
+        <h3>API Logs</h3>
+        <div id="api-logs"></div>
+        <button onclick="fetchLocationData()">Test API Now</button>
+        <button onclick="clearLogs()">Clear Logs</button>
+    </div>
+
+    <div id="map"></div>
+
+    <script>
+        let map;
+        let marker;
+        const deviceIdToTrack = 'SmartCane01';
+        
+        function log(message, type = 'info') {
+            const logsDiv = document.getElementById('api-logs');
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.className = `status ${type}`;
+            logEntry.innerHTML = `[${timestamp}] ${message}`;
+            logsDiv.insertBefore(logEntry, logsDiv.firstChild);
+            
+            // Keep only last 10 logs
+            while (logsDiv.children.length > 10) {
+                logsDiv.removeChild(logsDiv.lastChild);
+            }
+        }
+
+        function clearLogs() {
+            document.getElementById('api-logs').innerHTML = '';
+        }
+
+        function updateUI(data) {
+            try {
+                const lat = data.latitude;
+                const lon = data.longitude;
+                const timestamp_utc = new Date(data.timestamp_server);
+
+                if (isNaN(timestamp_utc.getTime())) {
+                    throw new Error("Invalid timestamp from server: " + data.timestamp_server);
+                }
+
+                const dateTimeString = new Intl.DateTimeFormat('vi-VN', {
+                    year: 'numeric', month: '2-digit', day: '2-digit',
+                    hour: '2-digit', minute: '2-digit', second: '2-digit',
+                    timeZone: 'Asia/Ho_Chi_Minh'
+                }).format(timestamp_utc);
+
+                document.getElementById('latitude-value').textContent = lat.toFixed(6);
+                document.getElementById('longitude-value').textContent = lon.toFixed(6);
+                document.getElementById('time-value').textContent = dateTimeString;
+                document.getElementById('status-text').textContent = 'Trực tuyến';
+                document.getElementById('status-text').className = 'status success';
+
+                // Update map
+                const newPosition = [lat, lon];
+                const popupContent = `<b>Cập nhật lúc: ${dateTimeString}</b><br>Lat: ${lat.toFixed(4)}, Lon: ${lon.toFixed(4)}`;
+                
+                if (marker) {
+                    marker.setLatLng(newPosition).setPopupContent(popupContent).openPopup();
+                } else {
+                    marker = L.marker(newPosition).addTo(map).bindPopup(popupContent).openPopup();
+                }
+
+                if (map.getZoom() < 16 || !map.getBounds().contains(newPosition)) {
+                    map.setView(newPosition, 17); 
+                } else {
+                    map.panTo(newPosition);
+                }
+
+                log(`✅ Data updated: ${lat.toFixed(6)}, ${lon.toFixed(6)} at ${dateTimeString}`, 'success');
+                
+            } catch (error) {
+                log(`❌ Error updating UI: ${error.message}`, 'error');
+                showErrorUI(error.message);
+            }
+        }
+        
+        function showErrorUI(message) {
+            document.getElementById('latitude-value').textContent = 'N/A';
+            document.getElementById('longitude-value').textContent = 'N/A';
+            document.getElementById('time-value').textContent = 'N/A';
+            document.getElementById('status-text').textContent = 'Lỗi kết nối';
+            document.getElementById('status-text').className = 'status error';
+            log(`❌ ${message}`, 'error');
+        }
+
+        async function fetchLocationData() {
+            log('🔄 Starting API call...', 'info');
+            
+            try {
+                const url = `/api/get_latest_location?deviceId=${deviceIdToTrack}`;
+                log(`📡 Calling: ${url}`, 'info');
+                
+                const response = await fetch(url, { 
+                    cache: 'no-store',
+                    headers: {
+                        'Cache-Control': 'no-cache'
+                    }
+                });
+                
+                log(`📡 Response status: ${response.status}`, response.ok ? 'success' : 'error');
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                log(`📦 Response data: ${JSON.stringify(data)}`, 'info');
+
+                if (data && typeof data.latitude === 'number') {
+                    updateUI(data);
+                } else {
+                    throw new Error('Invalid data received from server');
+                }
+                
+            } catch (error) { 
+                log(`❌ API Error: ${error.message}`, 'error');
+                showErrorUI(error.message);
+            }
+        }
+
+        function initMap() {
+            log('🗺️ Initializing map...', 'info');
+            
+            map = L.map('map').setView([10.8, 106.8], 13);
+            
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(map);
+
+            log('🗺️ Map initialized successfully', 'success');
+            
+            // Initial API call
+            fetchLocationData();
+            
+            // Set up auto-refresh every 30 seconds
+            setInterval(fetchLocationData, 30000);
+            log('⏰ Auto-refresh set to 30 seconds', 'info');
+        }
+
+        document.addEventListener('DOMContentLoaded', initMap);
+    </script>
+</body>
+</html>
+
+
