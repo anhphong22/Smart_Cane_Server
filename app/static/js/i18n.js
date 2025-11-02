@@ -305,7 +305,21 @@ const translations = {
         'stats.locations_today': 'Locations Today',
         'stats.distance_today': 'Distance Today',
         'stats.active_time': 'Active Time',
-        'stats.alerts_today': 'Alerts Today'
+        'stats.alerts_today': 'Alerts Today',
+        
+        // Empty States
+        'empty.map.title': 'No GPS Data Available',
+        'empty.map.description': 'The map will display location when GPS signal is received from the device.',
+        'empty.map.tip': 'Click "Get GPS" button to update location',
+        'empty.device.title': 'No Device Connected',
+        'empty.device.description': 'GPS device is not connected or hasn\'t sent data yet. Please check device connection and try again.',
+        'empty.device.tip': 'Tip: Make sure device is powered on and has internet connection',
+        'empty.analytics.title': 'No Analytics Data',
+        'empty.analytics.description': 'Analytics data will appear when the device starts sending location information. Please check back later.',
+        'empty.analytics.feature1': 'Distance traveled',
+        'empty.analytics.feature2': 'Active time',
+        'empty.analytics.feature3': 'Average speed',
+        'empty.analytics.feature4': 'Frequent locations'
     }
 };
 

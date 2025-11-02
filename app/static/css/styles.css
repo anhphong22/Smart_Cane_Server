@@ -1320,6 +1320,201 @@ body {
 }
 
 /* ============================================================
+   EMPTY STATES
+   ============================================================ */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-2xl) var(--spacing-xl);
+    text-align: center;
+    min-height: 400px;
+}
+
+.empty-state-icon {
+    width: 120px;
+    height: 120px;
+    margin-bottom: var(--spacing-xl);
+    background: var(--gradient-blue);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    color: white;
+    animation: pulse-empty 2s ease-in-out infinite;
+}
+
+@keyframes pulse-empty {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.05);
+        opacity: 0.9;
+    }
+}
+
+.empty-state-title {
+    font-family: var(--font-heading);
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-md);
+}
+
+.empty-state-description {
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+    max-width: 500px;
+    line-height: 1.6;
+    margin-bottom: var(--spacing-xl);
+}
+
+.empty-state-actions {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.empty-state-tips {
+    background: var(--color-bg-secondary);
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-radius: var(--radius-lg);
+    border-left: 4px solid var(--color-primary);
+}
+
+.empty-state-tip {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    margin: 0;
+}
+
+.empty-state-tip i {
+    color: var(--color-primary);
+    font-size: 1.125rem;
+}
+
+/* Empty State Features Preview */
+.empty-state-features {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-xl);
+    max-width: 500px;
+    width: 100%;
+}
+
+.feature-preview {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md);
+    background: var(--color-bg-secondary);
+    border-radius: var(--radius-lg);
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    transition: all var(--transition-base);
+}
+
+.feature-preview:hover {
+    background: var(--color-bg-tertiary);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+}
+
+.feature-preview i {
+    font-size: 1.25rem;
+    color: var(--color-primary);
+}
+
+/* Map Empty State */
+.map-empty-state {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 400;
+    background: var(--color-bg-primary);
+    padding: var(--spacing-2xl);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-xl);
+    max-width: 400px;
+}
+
+.map-empty-state-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto var(--spacing-lg);
+    background: var(--gradient-blue);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: white;
+}
+
+.map-empty-state-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.map-empty-state-description {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-lg);
+}
+
+/* Responsive Empty States */
+@media (max-width: 767px) {
+    .empty-state {
+        padding: var(--spacing-xl) var(--spacing-md);
+        min-height: 300px;
+    }
+    
+    .empty-state-icon {
+        width: 100px;
+        height: 100px;
+        font-size: 2.5rem;
+    }
+    
+    .empty-state-title {
+        font-size: 1.5rem;
+    }
+    
+    .empty-state-description {
+        font-size: 0.875rem;
+    }
+    
+    .empty-state-features {
+        grid-template-columns: 1fr;
+    }
+    
+    .empty-state-actions {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .empty-state-actions .btn-modern {
+        width: 100%;
+    }
+    
+    .map-empty-state {
+        max-width: 90%;
+        padding: var(--spacing-lg);
+    }
+}
+
+/* ============================================================
    UTILITIES
    ============================================================ */
 .text-muted {
@@ -1332,4 +1527,5 @@ body {
 
 .fullscreen-panel .map-container-full {
     height: calc(100% - 70px);
+    position: relative;
 }
