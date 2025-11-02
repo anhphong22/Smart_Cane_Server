@@ -91,10 +91,10 @@
                     </button>
                     <div class="dropdown-menu language-menu" id="language-menu">
                         <button class="dropdown-item" onclick="changeLanguage('vi')">
-                            ???? Ti?ng Vi?t
+                            🇻🇳 Tiếng Việt
                         </button>
                         <button class="dropdown-item" onclick="changeLanguage('en')">
-                            ???? English
+                            🇬🇧 English
                         </button>
                     </div>
                 </div>
@@ -171,7 +171,7 @@
                         <div class="panel-header">
                             <h3 class="panel-title">
                                 <i class="fas fa-map"></i>
-                                <span data-i18n="map.title">Bản Đồ V? Tr? Tr?c Ti?p</span>
+                                <span data-i18n="map.title">Bản Đồ Vị Trí Trực Tiếp</span>
                             </h3>
                             <div class="panel-actions">
                                 <button class="btn-icon-panel" onclick="centerMap()" data-i18n-title="button.center_map">
@@ -198,7 +198,7 @@
                         <div class="panel-header">
                             <h3 class="panel-title">
                                 <i class="fas fa-mobile-alt"></i>
-                                <span data-i18n="device.status">Tr?ng Th?i Thiết Bị</span>
+                                <span data-i18n="device.status">Trạng Thái Thiết Bị</span>
                             </h3>
                             <div class="status-indicator-wrapper">
                                 <span id="status-indicator" class="status-dot"></span>
@@ -268,7 +268,7 @@
                         <div class="panel-header">
                             <h3 class="panel-title">
                                 <i class="fas fa-list"></i>
-                                <span data-i18n="activity.title">Nh?t K? Ho?t ??ng</span>
+                                <span data-i18n="activity.title">Nhật Ký Hoạt Động</span>
                             </h3>
                             <button class="btn-icon-panel" onclick="clearActivityLog()" data-i18n-title="activity.clear">
                                 <i class="fas fa-trash-alt"></i>
@@ -282,19 +282,19 @@
                         <div class="panel-header">
                             <h3 class="panel-title">
                                 <i class="fas fa-route"></i>
-                                <span data-i18n="route.title">L?ch S? Tuy?n ???ng</span>
+                                <span data-i18n="route.title">Lịch Sử Tuyến Đường</span>
                             </h3>
                         </div>
                         <div class="route-controls">
                             <select id="route-hours" class="form-select-modern">
-                                <option value="1" data-i18n="route.last_hour">Gi? Qua</option>
-                                <option value="6" data-i18n="route.last_6hours">6 Gi? Qua</option>
-                                <option value="24" selected data-i18n="route.last_24hours">24 Gi? Qua</option>
-                                <option value="168" data-i18n="route.last_week">Tu?n Qua</option>
+                                <option value="1" data-i18n="route.last_hour">Giờ Qua</option>
+                                <option value="6" data-i18n="route.last_6hours">6 Giờ Qua</option>
+                                <option value="24" selected data-i18n="route.last_24hours">24 Giờ Qua</option>
+                                <option value="168" data-i18n="route.last_week">Tuần Qua</option>
                             </select>
                             <button class="btn-modern secondary" onclick="showRouteHistory()">
                                 <i class="fas fa-play"></i>
-                                <span data-i18n="button.show_route">Hi?n Th?</span>
+                                <span data-i18n="button.show_route">Hiển Thị</span>
                             </button>
                         </div>
                         <div id="route-analytics" class="route-analytics-content"></div>
@@ -308,7 +308,7 @@
                     <div class="panel-header">
                         <h3 class="panel-title">
                             <i class="fas fa-map-marked-alt"></i>
-                            <span data-i18n="map.title">Bản Đồ Tr?c Ti?p</span>
+                            <span data-i18n="map.title">Bản Đồ Trực Tiếp</span>
                         </h3>
                         <div class="panel-actions">
                             <button class="btn-modern primary" onclick="fetchLocationDataManual()">
@@ -327,7 +327,7 @@
                     <div class="panel-header">
                         <h3 class="panel-title">
                             <i class="fas fa-mobile-alt"></i>
-                            <span data-i18n="device.status">Chi Ti?t Thiết Bị</span>
+                            <span data-i18n="device.status">Chi Tiết Thiết Bị</span>
                         </h3>
                     </div>
                     <div class="panel-body">
@@ -336,9 +336,9 @@
                             <div class="empty-state-icon">
                                 <i class="fas fa-mobile-alt"></i>
                             </div>
-                            <h3 class="empty-state-title" data-i18n="empty.device.title">Ch?a C? Thiết Bị K?t N?i</h3>
+                            <h3 class="empty-state-title" data-i18n="empty.device.title">Chưa Có Thiết Bị Kết Nối</h3>
                             <p class="empty-state-description" data-i18n="empty.device.description">
-                                Thi?t b? GPS ch?a ???c k?t n?i ho?c ch?a g?i d? li?u. Vui l?ng ki?m tra k?t n?i thi?t b? v? th? l?i.
+                                Thiết bị GPS chưa được kết nối hoặc chưa gửi dữ liệu. Vui lòng kiểm tra kết nối thiết bị và thử lại.
                             </p>
                             <div class="empty-state-actions">
                                 <button class="btn-modern primary" onclick="fetchLocationDataManual()">
@@ -349,7 +349,7 @@
                             <div class="empty-state-tips">
                                 <p class="empty-state-tip">
                                     <i class="fas fa-lightbulb"></i>
-                                    <span data-i18n="empty.device.tip">M?o: ??m b?o thi?t b? ?? b?t v? c? k?t n?i internet</span>
+                                    <span data-i18n="empty.device.tip">Mẹo: Đảm bảo thiết bị đã bật và có kết nối internet</span>
                                 </p>
                             </div>
                         </div>
@@ -363,7 +363,7 @@
                     <div class="panel-header">
                         <h3 class="panel-title">
                             <i class="fas fa-chart-line"></i>
-                            <span data-i18n="analytics.title">Phân Tích Chi Ti?t</span>
+                            <span data-i18n="analytics.title">Phân Tích Chi Tiết</span>
                         </h3>
                     </div>
                     <div class="panel-body">
@@ -372,26 +372,26 @@
                             <div class="empty-state-icon">
                                 <i class="fas fa-chart-bar"></i>
                             </div>
-                            <h3 class="empty-state-title" data-i18n="empty.analytics.title">Ch?a C? D? Li?u Phân Tích</h3>
+                            <h3 class="empty-state-title" data-i18n="empty.analytics.title">Chưa Có D? Li?u Phân Tích</h3>
                             <p class="empty-state-description" data-i18n="empty.analytics.description">
-                                D? li?u ph?n t?ch s? xu?t hi?n khi thi?t b? b?t ??u g?i th?ng tin v? tr?. H?y ki?m tra l?i sau.
+                                Dữ liệu phân tích sẽ xuất hiện khi thiết bị bắt đầu gửi thông tin vị trí. Hãy kiểm tra lại sau.
                             </p>
                             <div class="empty-state-features">
                                 <div class="feature-preview">
                                     <i class="fas fa-route"></i>
-                                    <span data-i18n="empty.analytics.feature1">Quãng Đường di chuy?n</span>
+                                    <span data-i18n="empty.analytics.feature1">Quãng Đường di chuyển</span>
                                 </div>
                                 <div class="feature-preview">
                                     <i class="fas fa-clock"></i>
-                                    <span data-i18n="empty.analytics.feature2">Th?i gian ho?t ??ng</span>
+                                    <span data-i18n="empty.analytics.feature2">Thời gian hoạt động</span>
                                 </div>
                                 <div class="feature-preview">
                                     <i class="fas fa-tachometer-alt"></i>
-                                    <span data-i18n="empty.analytics.feature3">T?c ?? trung b?nh</span>
+                                    <span data-i18n="empty.analytics.feature3">Tốc độ trung bình</span>
                                 </div>
                                 <div class="feature-preview">
                                     <i class="fas fa-map-marked"></i>
-                                    <span data-i18n="empty.analytics.feature4">??a ?i?m th??ng xuy?n</span>
+                                    <span data-i18n="empty.analytics.feature4">Địa điểm thường xuyên</span>
                                 </div>
                             </div>
                         </div>
