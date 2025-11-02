@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ app_name }} - Real-time GPS Tracking</title>
+    <title data-i18n="app.title">G?y Th?ng Minh GPS</title>
     
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" 
           integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
     
-    <!-- Google Fonts - Modern 2025 Typography -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
@@ -25,181 +25,413 @@
     <link rel="stylesheet" href="/static/css/fontawesome-fix.css">
 </head>
 <body>
-    <!-- Main Container -->
-    <div class="container">
-        <!-- Header -->
-        <header class="header">
-            <div class="header-content">
-                <div class="logo-section">
-                    <div class="logo-icon"><i class="fas fa-walking"></i></div>
-                    <div>
-                        <h1 class="header-title">{{ app_name }}</h1>
-                        <p class="header-subtitle">Real-time GPS Monitoring System</p>
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar-nav">
+        <div class="sidebar-header">
+            <div class="logo">
+                <i class="fas fa-walking"></i>
+                <span class="logo-text" data-i18n="app.title">G?y Th?ng Minh</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-menu">
+            <a href="#overview" class="menu-item active" data-section="overview">
+                <i class="fas fa-th-large"></i>
+                <span data-i18n="dashboard.overview">T?ng Quan</span>
+            </a>
+            <a href="#map" class="menu-item" data-section="map">
+                <i class="fas fa-map-marked-alt"></i>
+                <span data-i18n="dashboard.map">B?n ??</span>
+            </a>
+            <a href="#device" class="menu-item" data-section="device">
+                <i class="fas fa-mobile-alt"></i>
+                <span data-i18n="dashboard.device">Thi?t B?</span>
+            </a>
+            <a href="#analytics" class="menu-item" data-section="analytics">
+                <i class="fas fa-chart-bar"></i>
+                <span data-i18n="dashboard.analytics">Ph?n T?ch</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="user-details">
+                    <div id="user-display" class="user-name">User</div>
+                    <div class="user-role">Admin</div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-wrapper">
+        <!-- Top Header -->
+        <header class="top-header">
+            <div class="header-left">
+                <button class="menu-toggle" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="breadcrumb">
+                    <span data-i18n="dashboard.overview">T?ng Quan</span>
+                </div>
+            </div>
+
+            <div class="header-right">
+                <!-- Language Switcher -->
+                <div class="language-dropdown">
+                    <button class="icon-btn" onclick="toggleLanguageMenu()">
+                        <i class="fas fa-globe"></i>
+                        <span id="current-lang">VI</span>
+                    </button>
+                    <div class="dropdown-menu language-menu" id="language-menu">
+                        <button class="dropdown-item" onclick="changeLanguage('vi')">
+                            ???? Ti?ng Vi?t
+                        </button>
+                        <button class="dropdown-item" onclick="changeLanguage('en')">
+                            ???? English
+                        </button>
                     </div>
                 </div>
-                <div class="header-actions">
-                    <div class="user-info">
-                        <span class="user-icon"><i class="fas fa-user"></i></span>
-                        <span id="user-display" class="user-name">User</span>
-                    </div>
-                    <div class="version-badge">v{{ app_version }}</div>
-                    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
-                        <svg class="theme-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="5"></circle>
-                            <line x1="12" y1="1" x2="12" y2="3"></line>
-                            <line x1="12" y1="21" x2="12" y2="23"></line>
-                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                            <line x1="1" y1="12" x2="3" y2="12"></line>
-                            <line x1="21" y1="12" x2="23" y2="12"></line>
-                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                        </svg>
-                    </button>
-                    <button id="logout-btn" class="btn-logout" onclick="logout()" title="Logout">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                            <polyline points="16 17 21 12 16 7"></polyline>
-                            <line x1="21" y1="12" x2="9" y2="12"></line>
-                        </svg>
-                    </button>
-                </div>
+
+                <!-- Theme Toggle -->
+                <button class="icon-btn" onclick="toggleTheme()" data-i18n-title="theme.toggle">
+                    <i class="fas fa-moon" id="theme-icon"></i>
+                </button>
+
+                <!-- Notifications -->
+                <button class="icon-btn" onclick="toggleNotifications()">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge" id="notification-count">0</span>
+                </button>
+
+                <!-- Logout -->
+                <button class="icon-btn" onclick="logout()" data-i18n-title="user.logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
             </div>
         </header>
 
-        <!-- Main Content Grid -->
-        <div class="main-grid">
-            <!-- Sidebar - Device Info Panel -->
-            <aside class="sidebar">
-                <div class="panel device-panel">
-                    <div class="panel-header">
-                        <h2 class="panel-title">Device Status</h2>
-                        <div class="status-wrapper">
-                            <span id="status-indicator" class="status-dot"></span>
-                            <span id="status-text" class="status-label">Offline</span>
+        <!-- Main Content Area -->
+        <main class="content-area">
+            <!-- Section: Overview -->
+            <section class="content-section active" id="section-overview">
+                <!-- Quick Stats -->
+                <div class="quick-stats">
+                    <div class="stat-card gradient-blue">
+                        <div class="stat-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-label" data-i18n="stats.locations_today">V? Tr? H?m Nay</div>
+                            <div class="stat-value" id="stat-locations">0</div>
                         </div>
                     </div>
 
-                    <div class="device-card">
-                        <div class="device-icon"><i class="fas fa-mobile-alt"></i></div>
-                        <div class="device-info">
-                            <span class="device-label">Device ID</span>
-                            <span id="deviceId" class="device-value">{{ device_id }}</span>
+                    <div class="stat-card gradient-green">
+                        <div class="stat-icon">
+                            <i class="fas fa-route"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-label" data-i18n="stats.distance_today">Qu?ng ???ng</div>
+                            <div class="stat-value" id="stat-distance">0 km</div>
                         </div>
                     </div>
 
-                    <!-- Stats Grid -->
-                    <div class="stats-grid">
-                        <div class="stat-card">
-                            <div class="stat-icon"><i class="fas fa-map-marker-alt"></i></div>
-                            <div class="stat-content">
-                                <span class="stat-label">Latitude</span>
-                                <span id="latitude-value" class="stat-value">--</span>
-                            </div>
+                    <div class="stat-card gradient-orange">
+                        <div class="stat-icon">
+                            <i class="fas fa-clock"></i>
                         </div>
-                        <div class="stat-card">
-                            <div class="stat-icon"><i class="fas fa-globe"></i></div>
-                            <div class="stat-content">
-                                <span class="stat-label">Longitude</span>
-                                <span id="longitude-value" class="stat-value">--</span>
-                            </div>
-                        </div>
-                        <div class="stat-card full-width">
-                            <div class="stat-icon"><i class="fas fa-clock"></i></div>
-                            <div class="stat-content">
-                                <span class="stat-label">Last Update</span>
-                                <span id="time-value" class="stat-value">--:--:--</span>
-                            </div>
+                        <div class="stat-content">
+                            <div class="stat-label" data-i18n="stats.active_time">Th?i Gian Ho?t ??ng</div>
+                            <div class="stat-value" id="stat-active-time">0h</div>
                         </div>
                     </div>
 
-                    <!-- Sync Status -->
-                    <div class="sync-status">
-                        <div class="sync-info">
-                            <span id="sync-status" class="sync-label"><i class="fas fa-sync-alt"></i> Auto Sync</span>
-                            <div id="sync-animation" class="sync-animation"></div>
+                    <div class="stat-card gradient-red">
+                        <div class="stat-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
                         </div>
-                        <div class="progress-bar">
-                            <div id="data-progress-bar" class="progress-fill"></div>
+                        <div class="stat-content">
+                            <div class="stat-label" data-i18n="stats.alerts_today">C?nh B?o</div>
+                            <div class="stat-value" id="stat-alerts">0</div>
                         </div>
-                    </div>
-
-                    <!-- Action Buttons -->
-                    <div class="action-buttons">
-                        <button id="track-button" class="btn btn-primary" onclick="fetchLocationDataManual()">
-                            <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                                <circle cx="12" cy="10" r="3"></circle>
-                            </svg>
-                            <span class="btn-text">Get Real-time GPS</span>
-                        </button>
-                        <button class="btn btn-secondary" onclick="centerMap()">
-                            <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <path d="M12 16v-4"></path>
-                                <path d="M12 8h.01"></path>
-                            </svg>
-                            <span>Center Map</span>
-                        </button>
                     </div>
                 </div>
 
-                <!-- Activity Log -->
-                <div class="panel activity-panel">
-                    <div class="panel-header">
-                        <h3 class="panel-title-small">Activity Log</h3>
-                        <button class="btn-icon-small" onclick="clearActivityLog()" title="Clear log">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="3 6 5 6 21 6"></polyline>
-                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                            </svg>
-                        </button>
-                    </div>
-                    <div id="activity-log" class="activity-log"></div>
-                </div>
-
-                <!-- Smart Features: Route History -->
-                <div class="panel route-panel">
-                    <div class="panel-header">
-                        <h3 class="panel-title-small"><i class="fas fa-chart-line"></i> Route History</h3>
-                    </div>
-                    <div class="route-controls">
-                        <select id="route-hours" class="form-select">
-                            <option value="1">Last Hour</option>
-                            <option value="6">Last 6 Hours</option>
-                            <option value="24" selected>Last 24 Hours</option>
-                            <option value="168">Last Week</option>
-                        </select>
-                        <button class="btn btn-secondary" onclick="showRouteHistory()">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-                            </svg>
-                            Show Route
-                        </button>
-                    </div>
-                    <div id="route-analytics" class="route-analytics"></div>
-                </div>
-            </aside>
-
-            <!-- Main Map Panel -->
-            <main class="map-section">
-                <div class="panel map-panel">
-                    <div class="map-header">
-                        <h2 class="map-title">Live Location Map</h2>
-                        <div class="map-controls">
-                            <button class="map-btn" onclick="toggleFullscreen()" title="Fullscreen">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
-                                </svg>
+                <!-- Main Grid -->
+                <div class="dashboard-grid">
+                    <!-- Live Map Panel -->
+                    <div class="panel map-panel-large">
+                        <div class="panel-header">
+                            <h3 class="panel-title">
+                                <i class="fas fa-map"></i>
+                                <span data-i18n="map.title">B?n ?? V? Tr? Tr?c Ti?p</span>
+                            </h3>
+                            <div class="panel-actions">
+                                <button class="btn-icon-panel" onclick="centerMap()" data-i18n-title="button.center_map">
+                                    <i class="fas fa-crosshairs"></i>
+                                </button>
+                                <button class="btn-icon-panel" onclick="toggleFullscreen()" data-i18n-title="button.fullscreen">
+                                    <i class="fas fa-expand"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div id="map" class="map-container"></div>
+                        
+                        <!-- Map Overlay Controls -->
+                        <div class="map-overlay-controls">
+                            <button class="map-control-btn primary" onclick="fetchLocationDataManual()">
+                                <i class="fas fa-location-arrow"></i>
+                                <span data-i18n="button.get_gps">L?y GPS</span>
                             </button>
                         </div>
                     </div>
-                    <div id="map" class="map-container"></div>
+
+                    <!-- Device Status Panel -->
+                    <div class="panel device-status-panel">
+                        <div class="panel-header">
+                            <h3 class="panel-title">
+                                <i class="fas fa-mobile-alt"></i>
+                                <span data-i18n="device.status">Tr?ng Th?i Thi?t B?</span>
+                            </h3>
+                            <div class="status-indicator-wrapper">
+                                <span id="status-indicator" class="status-dot"></span>
+                                <span id="status-text" class="status-label" data-i18n="device.status.offline">Ngo?i tuy?n</span>
+                            </div>
+                        </div>
+
+                        <div class="device-info-grid">
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="fas fa-id-card"></i>
+                                </div>
+                                <div class="info-content">
+                                    <div class="info-label" data-i18n="device.id">ID Thi?t B?</div>
+                                    <div class="info-value" id="deviceId">{{ device_id }}</div>
+                                </div>
+                            </div>
+
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="fas fa-map-pin"></i>
+                                </div>
+                                <div class="info-content">
+                                    <div class="info-label" data-i18n="gps.latitude">V? ??</div>
+                                    <div class="info-value" id="latitude-value">--</div>
+                                </div>
+                            </div>
+
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="fas fa-globe"></i>
+                                </div>
+                                <div class="info-content">
+                                    <div class="info-label" data-i18n="gps.longitude">Kinh ??</div>
+                                    <div class="info-value" id="longitude-value">--</div>
+                                </div>
+                            </div>
+
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div class="info-content">
+                                    <div class="info-label" data-i18n="gps.last_update">C?p Nh?t L?n Cu?i</div>
+                                    <div class="info-value" id="time-value">--:--:--</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sync Status -->
+                        <div class="sync-status-bar">
+                            <div class="sync-info">
+                                <i class="fas fa-sync-alt" id="sync-icon"></i>
+                                <span id="sync-status" data-i18n="sync.auto">T? ??ng ??ng B?</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div id="data-progress-bar" class="progress-fill"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </main>
-        </div>
+
+                <!-- Secondary Grid -->
+                <div class="secondary-grid">
+                    <!-- Activity Log -->
+                    <div class="panel activity-log-panel">
+                        <div class="panel-header">
+                            <h3 class="panel-title">
+                                <i class="fas fa-list"></i>
+                                <span data-i18n="activity.title">Nh?t K? Ho?t ??ng</span>
+                            </h3>
+                            <button class="btn-icon-panel" onclick="clearActivityLog()" data-i18n-title="activity.clear">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+                        <div id="activity-log" class="activity-log-content"></div>
+                    </div>
+
+                    <!-- Route History -->
+                    <div class="panel route-history-panel">
+                        <div class="panel-header">
+                            <h3 class="panel-title">
+                                <i class="fas fa-route"></i>
+                                <span data-i18n="route.title">L?ch S? Tuy?n ???ng</span>
+                            </h3>
+                        </div>
+                        <div class="route-controls">
+                            <select id="route-hours" class="form-select-modern">
+                                <option value="1" data-i18n="route.last_hour">Gi? Qua</option>
+                                <option value="6" data-i18n="route.last_6hours">6 Gi? Qua</option>
+                                <option value="24" selected data-i18n="route.last_24hours">24 Gi? Qua</option>
+                                <option value="168" data-i18n="route.last_week">Tu?n Qua</option>
+                            </select>
+                            <button class="btn-modern secondary" onclick="showRouteHistory()">
+                                <i class="fas fa-play"></i>
+                                <span data-i18n="button.show_route">Hi?n Th?</span>
+                            </button>
+                        </div>
+                        <div id="route-analytics" class="route-analytics-content"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section: Map (Full View) -->
+            <section class="content-section" id="section-map">
+                <div class="panel fullscreen-panel">
+                    <div class="panel-header">
+                        <h3 class="panel-title">
+                            <i class="fas fa-map-marked-alt"></i>
+                            <span data-i18n="map.title">B?n ?? Tr?c Ti?p</span>
+                        </h3>
+                        <div class="panel-actions">
+                            <button class="btn-modern primary" onclick="fetchLocationDataManual()">
+                                <i class="fas fa-sync"></i>
+                                <span data-i18n="button.refresh">L?m M?i</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="map-fullscreen" class="map-container-full"></div>
+                </div>
+            </section>
+
+            <!-- Section: Device -->
+            <section class="content-section" id="section-device">
+                <div class="panel">
+                    <div class="panel-header">
+                        <h3 class="panel-title">
+                            <i class="fas fa-mobile-alt"></i>
+                            <span data-i18n="device.status">Chi Ti?t Thi?t B?</span>
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        <p class="text-muted" data-i18n="message.loading">?ang t?i...</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section: Analytics -->
+            <section class="content-section" id="section-analytics">
+                <div class="panel">
+                    <div class="panel-header">
+                        <h3 class="panel-title">
+                            <i class="fas fa-chart-line"></i>
+                            <span data-i18n="analytics.title">Ph?n T?ch Chi Ti?t</span>
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        <p class="text-muted" data-i18n="message.loading">?ang t?i...</p>
+                    </div>
+                </div>
+            </section>
+        </main>
     </div>
 
+    <!-- Load Scripts -->
+    <script src="/static/js/i18n.js"></script>
     <script src="/static/js/app.js"></script>
+    
+    <script>
+        // Initialize language on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedLang = i18n.getLanguage();
+            document.documentElement.lang = savedLang;
+            document.getElementById('current-lang').textContent = savedLang.toUpperCase();
+            i18n.updatePageTranslations();
+            
+            // Update select options
+            updateSelectTranslations();
+        });
+
+        // Toggle sidebar for mobile
+        function toggleSidebar() {
+            document.querySelector('.sidebar-nav').classList.toggle('open');
+        }
+
+        // Toggle language menu
+        function toggleLanguageMenu() {
+            const menu = document.getElementById('language-menu');
+            menu.classList.toggle('show');
+        }
+
+        // Change language
+        function changeLanguage(lang) {
+            i18n.setLanguage(lang);
+            document.documentElement.lang = lang;
+            document.getElementById('current-lang').textContent = lang.toUpperCase();
+            toggleLanguageMenu();
+            updateSelectTranslations();
+        }
+
+        // Update select options translations
+        function updateSelectTranslations() {
+            const routeHours = document.getElementById('route-hours');
+            if (routeHours) {
+                Array.from(routeHours.options).forEach(option => {
+                    const i18nKey = option.getAttribute('data-i18n');
+                    if (i18nKey) {
+                        option.textContent = i18n.t(i18nKey);
+                    }
+                });
+            }
+        }
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.language-dropdown')) {
+                document.getElementById('language-menu').classList.remove('show');
+            }
+        });
+
+        // Section navigation
+        document.querySelectorAll('.menu-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                const section = this.getAttribute('data-section');
+                
+                // Update active menu item
+                document.querySelectorAll('.menu-item').forEach(mi => mi.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Update active section
+                document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active'));
+                document.getElementById('section-' + section).classList.add('active');
+                
+                // Update breadcrumb
+                const breadcrumb = document.querySelector('.breadcrumb span');
+                breadcrumb.setAttribute('data-i18n', 'dashboard.' + section);
+                breadcrumb.textContent = i18n.t('dashboard.' + section);
+            });
+        });
+
+        // Toggle notifications
+        function toggleNotifications() {
+            // Placeholder for notifications
+            alert(i18n.t('message.info') + ': No new notifications');
+        }
+    </script>
 </body>
 </html>

@@ -93,16 +93,54 @@ async function logout() {
 }
 
 /**
+ * Initialize i18n system
+ */
+function initI18n() {
+    if (typeof i18n === 'undefined') {
+        console.warn('i18n not loaded, using fallback');
+        return;
+    }
+    
+    const savedLang = i18n.getLanguage();
+    document.documentElement.lang = savedLang;
+    i18n.updatePageTranslations();
+    
+    // Listen for language changes
+    window.addEventListener('languageChanged', function(e) {
+        updateUITranslations();
+    });
+}
+
+/**
+ * Update UI translations dynamically
+ */
+function updateUITranslations() {
+    // Refresh any dynamic content that needs translation
+    if (DOM.statusText) {
+        // Update status based on current state
+        const isOnline = DOM.statusIndicator && DOM.statusIndicator.classList.contains('online');
+        if (isOnline) {
+            DOM.statusText.textContent = i18n.t('device.status.online');
+        } else {
+            DOM.statusText.textContent = i18n.t('device.status.offline');
+        }
+    }
+}
+
+/**
  * Initialize the application
  */
 function initApp() {
     if (!checkAuth()) return;
     
+    initI18n();
     initMap();
     startAutoRefresh();
     setupTheme();
     loadGeofences();
-    logActivity('Application initialized', 'info');
+    
+    const activityMsg = typeof i18n !== 'undefined' ? i18n.t('activity.initialized') : 'Application initialized';
+    logActivity(activityMsg, 'info');
     console.log('🚀 Smart Cane GPS Tracker initialized');
 }
 
