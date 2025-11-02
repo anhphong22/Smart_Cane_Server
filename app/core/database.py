@@ -48,19 +48,83 @@ def create_tables():
                 raise Exception("Failed to get database connection.")
             
             cursor = conn.cursor()
+            
+            # Users table
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS users (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    username VARCHAR(50) UNIQUE NOT NULL,
+                    password_hash VARCHAR(255) NOT NULL,
+                    email VARCHAR(100),
+                    full_name VARCHAR(100),
+                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    is_active BOOLEAN DEFAULT 1
+                )
+            ''')
+            
+            # Locations table with user reference
             cursor.execute('''
                 CREATE TABLE IF NOT EXISTS locations (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     device_id VARCHAR(50) DEFAULT 'SmartCane01',
                     latitude REAL NOT NULL,
                     longitude REAL NOT NULL,
-                    timestamp_server DATETIME DEFAULT CURRENT_TIMESTAMP
+                    timestamp_server DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    user_id INTEGER,
+                    FOREIGN KEY (user_id) REFERENCES users(id)
                 )
             ''')
+            
+            # Geofences table
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS geofences (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    user_id INTEGER NOT NULL,
+                    name VARCHAR(100) NOT NULL,
+                    latitude REAL NOT NULL,
+                    longitude REAL NOT NULL,
+                    radius REAL NOT NULL,
+                    alert_on_enter BOOLEAN DEFAULT 1,
+                    alert_on_exit BOOLEAN DEFAULT 1,
+                    is_active BOOLEAN DEFAULT 1,
+                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    FOREIGN KEY (user_id) REFERENCES users(id)
+                )
+            ''')
+            
+            # Geofence alerts table
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS geofence_alerts (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    geofence_id INTEGER NOT NULL,
+                    alert_type VARCHAR(10) NOT NULL,
+                    latitude REAL NOT NULL,
+                    longitude REAL NOT NULL,
+                    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    is_read BOOLEAN DEFAULT 0,
+                    FOREIGN KEY (geofence_id) REFERENCES geofences(id)
+                )
+            ''')
+            
+            # Route history table
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS route_history (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    user_id INTEGER NOT NULL,
+                    device_id VARCHAR(50) NOT NULL,
+                    route_name VARCHAR(100),
+                    start_time DATETIME NOT NULL,
+                    end_time DATETIME,
+                    total_distance REAL,
+                    FOREIGN KEY (user_id) REFERENCES users(id)
+                )
+            ''')
+            
             conn.commit()
-            print("? Table 'locations' checked/created successfully in SQLite.")
+            print("? All database tables checked/created successfully.")
+            print("?? To create admin user, run: python3 create_admin.py")
     except Exception as e:
-        print(f"? Error creating table 'locations' in SQLite: {e}")
+        print(f"? Error creating tables in SQLite: {e}")
         print(traceback.format_exc())
 
 

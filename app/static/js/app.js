@@ -1,5 +1,5 @@
 /**
- * Smart Cane GPS Tracker - Frontend Application
+ * Smart Cane GPS Tracker - Frontend Application with Auth & Smart Features
  * Modern JavaScript with ES6+ features
  */
 
@@ -12,7 +12,14 @@ const AppState = {
     autoRefreshInterval: null,
     refreshRate: 30000, // 30 seconds
     activityLog: [],
-    maxLogEntries: 20
+    maxLogEntries: 20,
+    auth: {
+        token: localStorage.getItem('access_token'),
+        user: JSON.parse(localStorage.getItem('user') || 'null')
+    },
+    geofences: [],
+    routeHistory: [],
+    routePlaybackInterval: null
 };
 
 // DOM Elements Cache
@@ -26,16 +33,75 @@ const DOM = {
     lonValue: document.getElementById('longitude-value'),
     timeValue: document.getElementById('time-value'),
     trackButton: document.getElementById('track-button'),
-    activityLog: document.getElementById('activity-log')
+    activityLog: document.getElementById('activity-log'),
+    userDisplay: document.getElementById('user-display'),
+    logoutBtn: document.getElementById('logout-btn')
 };
+
+/**
+ * Check authentication
+ */
+function checkAuth() {
+    if (!AppState.auth.token) {
+        window.location.href = '/login';
+        return false;
+    }
+    
+    // Display user info
+    if (DOM.userDisplay && AppState.auth.user) {
+        DOM.userDisplay.textContent = AppState.auth.user.username || 'User';
+    }
+    
+    return true;
+}
+
+/**
+ * Make authenticated API request
+ */
+async function authFetch(url, options = {}) {
+    const headers = {
+        ...options.headers,
+        'Authorization': `Bearer ${AppState.auth.token}`
+    };
+    
+    const response = await fetch(url, { ...options, headers });
+    
+    if (response.status === 401) {
+        // Token expired or invalid
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('user');
+        window.location.href = '/login';
+        throw new Error('Unauthorized');
+    }
+    
+    return response;
+}
+
+/**
+ * Logout function
+ */
+async function logout() {
+    try {
+        await authFetch('/auth/logout', { method: 'POST' });
+    } catch (error) {
+        console.log('Logout error:', error);
+    } finally {
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('user');
+        window.location.href = '/login';
+    }
+}
 
 /**
  * Initialize the application
  */
 function initApp() {
+    if (!checkAuth()) return;
+    
     initMap();
     startAutoRefresh();
     setupTheme();
+    loadGeofences();
     logActivity('Application initialized', 'info');
     console.log('?? Smart Cane GPS Tracker initialized');
 }
@@ -107,7 +173,6 @@ function createInitialMarker() {
 
 /**
  * Fetch location data from API
- * @param {boolean} useRealTime - Use real-time GPS endpoint
  */
 async function fetchLocationData(useRealTime = false) {
     updateSyncStatus(true);
@@ -141,6 +206,9 @@ async function fetchLocationData(useRealTime = false) {
             updateUI(data, useRealTime);
             setProgressBar(100);
             logActivity(`GPS data updated: ${data.latitude.toFixed(6)}, ${data.longitude.toFixed(6)}`, 'success');
+            
+            // Check geofences
+            checkGeofences(data.latitude, data.longitude);
         } else {
             throw new Error('Invalid data received from server');
         }
@@ -155,8 +223,6 @@ async function fetchLocationData(useRealTime = false) {
 
 /**
  * Update UI with location data
- * @param {object} data - Location data
- * @param {boolean} isRealTime - Is real-time data
  */
 function updateUI(data, isRealTime = false) {
     try {
@@ -213,16 +279,12 @@ function updateUI(data, isRealTime = false) {
 
 /**
  * Update map marker
- * @param {array} position - [lat, lon]
- * @param {object} info - Marker information
  */
 function updateMarker(position, info) {
     const { latitude, longitude, dateTimeString, source, isRealTime } = info;
 
     // Create custom marker icon
     const markerIcon = isRealTime ? '??' : '??';
-    const markerColor = isRealTime ? '#ef4444' : '#10b981';
-
     const customIcon = L.divIcon({
         html: `<div class="custom-marker" style="font-size: 28px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));">${markerIcon}</div>`,
         className: '',
@@ -266,7 +328,6 @@ function updateMarker(position, info) {
 
 /**
  * Show error state in UI
- * @param {string} message - Error message
  */
 function showErrorUI(message) {
     DOM.latValue.textContent = 'N/A';
@@ -298,7 +359,6 @@ async function fetchLocationDataManual() {
 
 /**
  * Set progress bar width
- * @param {number} percentage - Progress percentage (0-100)
  */
 function setProgressBar(percentage) {
     if (DOM.progressBar) {
@@ -308,7 +368,6 @@ function setProgressBar(percentage) {
 
 /**
  * Update sync status animation
- * @param {boolean} syncing - Is syncing
  */
 function updateSyncStatus(syncing) {
     if (DOM.syncAnimation) {
@@ -370,8 +429,6 @@ function toggleFullscreen() {
 
 /**
  * Log activity to activity log panel
- * @param {string} message - Log message
- * @param {string} type - Log type (success, error, info)
  */
 function logActivity(message, type = 'info') {
     const timestamp = new Date().toLocaleTimeString('vi-VN');
@@ -435,6 +492,153 @@ function toggleTheme() {
     logActivity(`Theme changed to ${newTheme} mode`, 'info');
 }
 
+// ============= SMART FEATURES =============
+
+/**
+ * Load geofences for current user
+ */
+async function loadGeofences() {
+    try {
+        const response = await authFetch('/geofences');
+        if (response.ok) {
+            AppState.geofences = await response.json();
+            displayGeofences();
+            logActivity(`Loaded ${AppState.geofences.length} geofences`, 'info');
+        }
+    } catch (error) {
+        console.error('Error loading geofences:', error);
+    }
+}
+
+/**
+ * Display geofences on map
+ */
+function displayGeofences() {
+    // Clear existing geofence layers
+    AppState.map.eachLayer(layer => {
+        if (layer instanceof L.Circle && layer.options.className === 'geofence') {
+            AppState.map.removeLayer(layer);
+        }
+    });
+
+    // Add geofence circles
+    AppState.geofences.forEach(geofence => {
+        L.circle([geofence.latitude, geofence.longitude], {
+            radius: geofence.radius,
+            color: '#3b82f6',
+            fillColor: '#3b82f6',
+            fillOpacity: 0.1,
+            className: 'geofence'
+        }).bindPopup(`
+            <strong>${geofence.name}</strong><br>
+            Radius: ${geofence.radius}m<br>
+            <button onclick="deleteGeofence(${geofence.id})">Delete</button>
+        `).addTo(AppState.map);
+    });
+}
+
+/**
+ * Check if location breaches geofences
+ */
+async function checkGeofences(latitude, longitude) {
+    if (AppState.geofences.length === 0) return;
+
+    try {
+        const response = await authFetch('/geofences/check', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ latitude, longitude })
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            if (data.alerts_triggered > 0) {
+                data.alerts.forEach(alert => {
+                    logActivity(`?? Geofence Alert: ${alert.alert_type} ${alert.geofence_name}`, 'error');
+                });
+            }
+        }
+    } catch (error) {
+        console.error('Error checking geofences:', error);
+    }
+}
+
+/**
+ * Show route history on map
+ */
+async function showRouteHistory() {
+    try {
+        const hours = document.getElementById('route-hours')?.value || 24;
+        const response = await authFetch(`/route-history?hours=${hours}`);
+        
+        if (response.ok) {
+            const data = await response.json();
+            displayRouteOnMap(data.route_points);
+            displayRouteAnalytics(data.analytics);
+            logActivity(`Loaded route with ${data.route_points.length} points`, 'success');
+        }
+    } catch (error) {
+        console.error('Error loading route history:', error);
+        logActivity('Failed to load route history', 'error');
+    }
+}
+
+/**
+ * Display route on map
+ */
+function displayRouteOnMap(routePoints) {
+    if (!routePoints || routePoints.length === 0) return;
+
+    // Remove existing route
+    AppState.map.eachLayer(layer => {
+        if (layer instanceof L.Polyline && layer.options.className === 'route-line') {
+            AppState.map.removeLayer(layer);
+        }
+    });
+
+    // Create polyline
+    const latLngs = routePoints.map(p => [p.latitude, p.longitude]);
+    L.polyline(latLngs, {
+        color: '#ef4444',
+        weight: 3,
+        opacity: 0.7,
+        className: 'route-line'
+    }).addTo(AppState.map);
+
+    // Fit map to route bounds
+    const bounds = L.latLngBounds(latLngs);
+    AppState.map.fitBounds(bounds, { padding: [50, 50] });
+}
+
+/**
+ * Display route analytics
+ */
+function displayRouteAnalytics(analytics) {
+    const analyticsDiv = document.getElementById('route-analytics');
+    if (!analyticsDiv) return;
+
+    analyticsDiv.innerHTML = `
+        <div class="analytics-grid">
+            <div class="analytics-item">
+                <span class="analytics-label">Distance</span>
+                <span class="analytics-value">${analytics.total_distance_km} km</span>
+            </div>
+            <div class="analytics-item">
+                <span class="analytics-label">Duration</span>
+                <span class="analytics-value">${analytics.duration_minutes} min</span>
+            </div>
+            <div class="analytics-item">
+                <span class="analytics-label">Avg Speed</span>
+                <span class="analytics-value">${analytics.average_speed} km/h</span>
+            </div>
+            <div class="analytics-item">
+                <span class="analytics-label">Points</span>
+                <span class="analytics-value">${analytics.total_points}</span>
+            </div>
+        </div>
+    `;
+}
+
 // Initialize app when DOM is ready
 document.addEventListener('DOMContentLoaded', initApp);
 
@@ -451,3 +655,5 @@ window.centerMap = centerMap;
 window.toggleFullscreen = toggleFullscreen;
 window.clearActivityLog = clearActivityLog;
 window.toggleTheme = toggleTheme;
+window.logout = logout;
+window.showRouteHistory = showRouteHistory;

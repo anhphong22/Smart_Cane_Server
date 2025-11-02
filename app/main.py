@@ -11,7 +11,9 @@ import socket
 from pathlib import Path
 
 from .core.config import settings
-from .api.routes import router
+from .api.routes import router as main_router
+from .api.auth_routes import router as auth_router
+from .api.smart_routes import router as smart_router
 
 # Create FastAPI app
 app = FastAPI(
@@ -38,13 +40,28 @@ app.mount("/static", StaticFiles(directory=str(Path(__file__).parent / "static")
 templates = Jinja2Templates(directory=str(Path(__file__).parent / "templates"))
 
 # Include API routes
-app.include_router(router)
+app.include_router(main_router)
+app.include_router(auth_router)
+app.include_router(smart_router)
 
 
 @app.get("/", response_class=HTMLResponse, tags=["pages"])
 async def root():
     """Root endpoint - redirects to map page"""
     return RedirectResponse(url="/map")
+
+
+@app.get("/login", response_class=HTMLResponse, tags=["pages"])
+async def login_page(request: Request):
+    """Login page"""
+    try:
+        return templates.TemplateResponse("login.html", {"request": request})
+    except Exception as e:
+        print(f"❌ Error rendering login template: {e}")
+        return HTMLResponse(
+            content=f"<h1>Server Error</h1><p>Error rendering page: {str(e)}</p>",
+            status_code=500
+        )
 
 
 @app.get("/map", response_class=HTMLResponse, tags=["pages"])
