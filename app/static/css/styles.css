@@ -190,6 +190,7 @@ body {
 
 .user-icon {
     font-size: var(--font-size-lg);
+    color: var(--color-primary);
 }
 
 .user-name {
@@ -358,6 +359,7 @@ body {
 
 .device-icon {
     font-size: var(--font-size-2xl);
+    color: var(--color-primary);
 }
 
 .device-info {
@@ -410,6 +412,7 @@ body {
 
 .stat-icon {
     font-size: var(--font-size-xl);
+    color: var(--color-primary);
 }
 
 .stat-content {
@@ -670,6 +673,10 @@ body {
     color: var(--color-text-secondary);
     border-left: 3px solid transparent;
     transition: all var(--transition-base);
+}
+
+.activity-item i {
+    margin-right: var(--space-2);
 }
 
 .activity-item.success {
