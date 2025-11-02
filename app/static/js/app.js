@@ -103,7 +103,7 @@ function initApp() {
     setupTheme();
     loadGeofences();
     logActivity('Application initialized', 'info');
-    console.log('?? Smart Cane GPS Tracker initialized');
+    console.log('🚀 Smart Cane GPS Tracker initialized');
 }
 
 /**
@@ -159,7 +159,7 @@ function initMap() {
  */
 function createInitialMarker() {
     const initialIcon = L.divIcon({
-        html: `<div class="custom-marker initial">??</div>`,
+        html: `<div class="custom-marker initial"><i class="fas fa-map-marker-alt" style="color: #ef4444; font-size: 24px;"></i></div>`,
         className: '',
         iconSize: [32, 32],
         iconAnchor: [16, 32],
@@ -183,7 +183,7 @@ async function fetchLocationData(useRealTime = false) {
             ? `/api/get_real_gps?deviceId=${AppState.deviceId}`
             : `/api/get_latest_location?deviceId=${AppState.deviceId}`;
 
-        console.log(`?? Fetching data from: ${endpoint}`);
+        console.log(`📡 Fetching data from: ${endpoint}`);
         logActivity(`Fetching GPS data ${useRealTime ? '(real-time)' : ''}...`, 'info');
 
         const response = await fetch(endpoint, {
@@ -255,10 +255,10 @@ function updateUI(data, isRealTime = false) {
 
         if (isRealTime) {
             DOM.statusText.textContent = 'Real-time GPS';
-            DOM.syncStatus.textContent = '?? Live Data';
+            DOM.syncStatus.innerHTML = '<i class="fas fa-signal"></i> Live Data';
         } else {
             DOM.statusText.textContent = 'Online';
-            DOM.syncStatus.textContent = '?? Auto Sync';
+            DOM.syncStatus.innerHTML = '<i class="fas fa-sync-alt"></i> Auto Sync';
         }
 
         // Update marker
@@ -284,7 +284,7 @@ function updateMarker(position, info) {
     const { latitude, longitude, dateTimeString, source, isRealTime } = info;
 
     // Create custom marker icon
-    const markerIcon = isRealTime ? '??' : '??';
+    const markerIcon = isRealTime ? 'fa-circle' : 'fa-map-marker-alt';
     const customIcon = L.divIcon({
         html: `<div class="custom-marker" style="font-size: 28px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));">${markerIcon}</div>`,
         className: '',
@@ -296,7 +296,7 @@ function updateMarker(position, info) {
     // Popup content
     const popupContent = `
         <div class="popup-content">
-            <div class="popup-title">${isRealTime ? '?? Live GPS' : '?? GPS Location'}</div>
+            <div class="popup-title">${popupIcon} ${isRealTime ? 'Live GPS' : 'GPS Location'}</div>
             <div class="popup-time">${dateTimeString}</div>
             <div class="popup-coords">
                 <div>Lat: ${latitude.toFixed(6)}</div>
@@ -554,7 +554,7 @@ async function checkGeofences(latitude, longitude) {
             const data = await response.json();
             if (data.alerts_triggered > 0) {
                 data.alerts.forEach(alert => {
-                    logActivity(`?? Geofence Alert: ${alert.alert_type} ${alert.geofence_name}`, 'error');
+                    logActivity(`<i class="fas fa-exclamation-triangle"></i> Geofence Alert: ${alert.alert_type} ${alert.geofence_name}`, 'error');
                 });
             }
         }
