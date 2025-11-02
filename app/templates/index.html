@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ app_name }} - Real-time GPS Tracking</title>
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" 
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    
+    <!-- Google Fonts - Modern 2025 Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" 
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo-icon">??</div>
+                    <div>
+                        <h1 class="header-title">{{ app_name }}</h1>
+                        <p class="header-subtitle">Real-time GPS Monitoring System</p>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <div class="version-badge">v{{ app_version }}</div>
+                    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
+                        <svg class="theme-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="5"></circle>
+                            <line x1="12" y1="1" x2="12" y2="3"></line>
+                            <line x1="12" y1="21" x2="12" y2="23"></line>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                            <line x1="1" y1="12" x2="3" y2="12"></line>
+                            <line x1="21" y1="12" x2="23" y2="12"></line>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Grid -->
+        <div class="main-grid">
+            <!-- Sidebar - Device Info Panel -->
+            <aside class="sidebar">
+                <div class="panel device-panel">
+                    <div class="panel-header">
+                        <h2 class="panel-title">Device Status</h2>
+                        <div class="status-wrapper">
+                            <span id="status-indicator" class="status-dot"></span>
+                            <span id="status-text" class="status-label">Offline</span>
+                        </div>
+                    </div>
+
+                    <div class="device-card">
+                        <div class="device-icon">??</div>
+                        <div class="device-info">
+                            <span class="device-label">Device ID</span>
+                            <span id="deviceId" class="device-value">{{ device_id }}</span>
+                        </div>
+                    </div>
+
+                    <!-- Stats Grid -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">??</div>
+                            <div class="stat-content">
+                                <span class="stat-label">Latitude</span>
+                                <span id="latitude-value" class="stat-value">--</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">??</div>
+                            <div class="stat-content">
+                                <span class="stat-label">Longitude</span>
+                                <span id="longitude-value" class="stat-value">--</span>
+                            </div>
+                        </div>
+                        <div class="stat-card full-width">
+                            <div class="stat-icon">??</div>
+                            <div class="stat-content">
+                                <span class="stat-label">Last Update</span>
+                                <span id="time-value" class="stat-value">--:--:--</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sync Status -->
+                    <div class="sync-status">
+                        <div class="sync-info">
+                            <span id="sync-status" class="sync-label">?? Auto Sync</span>
+                            <div id="sync-animation" class="sync-animation"></div>
+                        </div>
+                        <div class="progress-bar">
+                            <div id="data-progress-bar" class="progress-fill"></div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="action-buttons">
+                        <button id="track-button" class="btn btn-primary" onclick="fetchLocationDataManual()">
+                            <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                            </svg>
+                            <span class="btn-text">Get Real-time GPS</span>
+                        </button>
+                        <button class="btn btn-secondary" onclick="centerMap()">
+                            <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="M12 16v-4"></path>
+                                <path d="M12 8h.01"></path>
+                            </svg>
+                            <span>Center Map</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Activity Log -->
+                <div class="panel activity-panel">
+                    <div class="panel-header">
+                        <h3 class="panel-title-small">Activity Log</h3>
+                        <button class="btn-icon-small" onclick="clearActivityLog()" title="Clear log">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="3 6 5 6 21 6"></polyline>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <div id="activity-log" class="activity-log"></div>
+                </div>
+            </aside>
+
+            <!-- Main Map Panel -->
+            <main class="map-section">
+                <div class="panel map-panel">
+                    <div class="map-header">
+                        <h2 class="map-title">Live Location Map</h2>
+                        <div class="map-controls">
+                            <button class="map-btn" onclick="toggleFullscreen()" title="Fullscreen">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="map" class="map-container"></div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
