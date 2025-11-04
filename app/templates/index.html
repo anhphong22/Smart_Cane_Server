@@ -40,9 +40,13 @@
                     <span class="logo-subtitle">GPS Tracker</span>
                 </div>
             </div>
+            <button class="sidebar-close" onclick="toggleSidebar()" aria-label="Close sidebar">
+                <i class="fas fa-times"></i>
+            </button>
         </div>
 
         <nav class="sidebar-menu">
+            <!-- Main Navigation -->
             <div class="menu-section">
                 <div class="menu-section-title" data-i18n="menu.main">Main Menu</div>
                 <a href="#overview" class="menu-item active" data-section="overview">
@@ -63,12 +67,49 @@
                     <span data-i18n="dashboard.analytics">Phân Tích</span>
                 </a>
             </div>
+
+            <!-- Quick Actions -->
+            <div class="menu-section">
+                <div class="menu-section-title" data-i18n="menu.quick_actions">Quick Actions</div>
+                <button class="menu-item menu-action" onclick="fetchLocationDataManual()">
+                    <i class="fas fa-location-arrow"></i>
+                    <span data-i18n="button.get_gps">Lấy GPS</span>
+                </button>
+                <button class="menu-item menu-action" onclick="centerMap()">
+                    <i class="fas fa-crosshairs"></i>
+                    <span data-i18n="button.center_map">Trung Tâm</span>
+                </button>
+                <button class="menu-item menu-action" onclick="showRouteHistory()">
+                    <i class="fas fa-route"></i>
+                    <span data-i18n="route.title">Lịch Sử</span>
+                </button>
+            </div>
         </nav>
 
         <div class="sidebar-footer">
+            <!-- Quick Stats -->
+            <div class="sidebar-stats">
+                <div class="sidebar-stat">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <div class="sidebar-stat-content">
+                        <span class="sidebar-stat-value" id="sidebar-locations">0</span>
+                        <span class="sidebar-stat-label" data-i18n="stats.locations">Vị trí</span>
+                    </div>
+                </div>
+                <div class="sidebar-stat">
+                    <i class="fas fa-bell"></i>
+                    <div class="sidebar-stat-content">
+                        <span class="sidebar-stat-value" id="sidebar-alerts">0</span>
+                        <span class="sidebar-stat-label" data-i18n="stats.alerts">Cảnh báo</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Profile -->
             <div class="user-profile" onclick="toggleUserMenu()">
                 <div class="user-avatar">
                     <i class="fas fa-user"></i>
+                    <span class="user-status-dot" id="userStatus"></span>
                 </div>
                 <div class="user-details">
                     <div id="user-display" class="user-name">User</div>
@@ -78,6 +119,16 @@
             </div>
 
             <div class="user-dropdown-menu" id="userDropdownMenu">
+                <div class="user-menu-header">
+                    <div class="user-menu-avatar">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <div class="user-menu-info">
+                        <div class="user-menu-name" id="user-menu-display">User</div>
+                        <div class="user-menu-email">admin@example.com</div>
+                    </div>
+                </div>
+                <div class="user-menu-divider"></div>
                 <a href="#profile" class="user-menu-item">
                     <i class="fas fa-user-circle"></i>
                     <span data-i18n="menu.profile">Profile</span>
@@ -85,6 +136,10 @@
                 <a href="#preferences" class="user-menu-item">
                     <i class="fas fa-sliders-h"></i>
                     <span data-i18n="menu.preferences">Preferences</span>
+                </a>
+                <a href="#help" class="user-menu-item">
+                    <i class="fas fa-question-circle"></i>
+                    <span data-i18n="menu.help">Help & Support</span>
                 </a>
                 <div class="user-menu-divider"></div>
                 <a href="#" class="user-menu-item logout" onclick="logout(); return false;">
@@ -100,18 +155,26 @@
         <!-- Top Header -->
         <header class="top-header">
             <div class="header-left">
-                <button class="menu-toggle" onclick="toggleSidebar()">
+                <button class="menu-toggle" onclick="toggleSidebar()" aria-label="Toggle menu">
                     <i class="fas fa-bars"></i>
                 </button>
                 <div class="breadcrumb">
-                    <span data-i18n="dashboard.overview">Tổng Quan</span>
+                    <i class="breadcrumb-icon fas fa-th-large" id="breadcrumb-icon"></i>
+                    <span class="breadcrumb-text" data-i18n="dashboard.overview">Tổng Quan</span>
                 </div>
             </div>
 
             <div class="header-right">
+                <!-- Search (for future enhancement) -->
+                <div class="search-wrapper">
+                    <button class="icon-btn" onclick="toggleSearch()" aria-label="Search">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+
                 <!-- Language Switcher -->
                 <div class="language-dropdown">
-                    <button class="icon-btn" onclick="toggleLanguageMenu()">
+                    <button class="icon-btn" onclick="toggleLanguageMenu()" aria-label="Change language">
                         <span id="current-flag" style="font-size: 1.25rem;">🇻🇳</span>
                     </button>
                     <div class="dropdown-menu language-menu" id="language-menu">
@@ -127,20 +190,38 @@
                 </div>
 
                 <!-- Theme Toggle -->
-                <button class="icon-btn" onclick="toggleTheme()" data-i18n-title="theme.toggle">
+                <button class="icon-btn theme-toggle" onclick="toggleTheme()" data-i18n-title="theme.toggle" aria-label="Toggle theme">
                     <i class="fas fa-moon" id="theme-icon"></i>
                 </button>
 
                 <!-- Notifications -->
-                <button class="icon-btn" onclick="toggleNotifications()">
-                    <i class="fas fa-bell"></i>
-                    <span class="badge" id="notification-count">0</span>
-                </button>
+                <div class="notification-dropdown">
+                    <button class="icon-btn" onclick="toggleNotifications()" aria-label="Notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge" id="notification-count">0</span>
+                    </button>
+                    <div class="dropdown-menu notification-menu" id="notification-menu">
+                        <div class="notification-header">
+                            <span data-i18n="notifications.title">Thông báo</span>
+                            <button class="notification-clear" onclick="clearNotifications()">
+                                <i class="fas fa-check-double"></i>
+                            </button>
+                        </div>
+                        <div class="notification-list" id="notification-list">
+                            <div class="notification-empty">
+                                <i class="fas fa-bell-slash"></i>
+                                <span data-i18n="notifications.empty">Không có thông báo</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                <!-- Logout -->
-                <button class="icon-btn" onclick="logout()" data-i18n-title="user.logout">
-                    <i class="fas fa-sign-out-alt"></i>
-                </button>
+                <!-- User Profile -->
+                <div class="header-user-dropdown">
+                    <button class="icon-btn user-btn" onclick="toggleUserMenu()" aria-label="User menu">
+                        <i class="fas fa-user-circle"></i>
+                    </button>
+                </div>
             </div>
         </header>
 
@@ -536,11 +617,19 @@
             }
         });
 
-        // Section navigation
+        // Section navigation with icon mapping
+        const sectionIcons = {
+            'overview': 'fa-th-large',
+            'map': 'fa-map-marked-alt',
+            'device': 'fa-mobile-alt',
+            'analytics': 'fa-chart-bar'
+        };
+
         document.querySelectorAll('.menu-item').forEach(item => {
             item.addEventListener('click', function(e) {
                 e.preventDefault();
                 const section = this.getAttribute('data-section');
+                if (!section) return; // Skip action buttons
                 
                 // Update active menu item
                 document.querySelectorAll('.menu-item').forEach(mi => mi.classList.remove('active'));
@@ -550,28 +639,67 @@
                 document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active'));
                 document.getElementById('section-' + section).classList.add('active');
                 
-                // Update breadcrumb
-                const breadcrumb = document.querySelector('.breadcrumb span');
-                breadcrumb.setAttribute('data-i18n', 'dashboard.' + section);
-                breadcrumb.textContent = i18n.t('dashboard.' + section);
+                // Update breadcrumb with icon
+                const breadcrumbIcon = document.getElementById('breadcrumb-icon');
+                const breadcrumbText = document.querySelector('.breadcrumb-text');
+                if (breadcrumbIcon && sectionIcons[section]) {
+                    breadcrumbIcon.className = 'breadcrumb-icon fas ' + sectionIcons[section];
+                }
+                if (breadcrumbText) {
+                    breadcrumbText.setAttribute('data-i18n', 'dashboard.' + section);
+                    breadcrumbText.textContent = i18n.t('dashboard.' + section);
+                }
+                
+                // Close sidebar on mobile after selection
+                if (window.innerWidth < 992) {
+                    const sidebar = document.querySelector('.sidebar-nav');
+                    if (sidebar) sidebar.classList.remove('open');
+                }
             });
         });
 
-        // Toggle notifications
-        function toggleNotifications() {
-            // Placeholder for notifications
-            alert(i18n.t('message.info') + ': No new notifications');
-        }
-
-        // Toggle user menu
+        // Toggle user menu with dropdown closing
         function toggleUserMenu() {
-            document.getElementById('userDropdownMenu').classList.toggle('show');
+            const menu = document.getElementById('userDropdownMenu');
+            if (!menu) return;
+            
+            // Close other dropdowns
+            document.getElementById('language-menu')?.classList.remove('show');
+            document.getElementById('notification-menu')?.classList.remove('show');
+            
+            menu.classList.toggle('show');
+            
+            // Update user menu display name
+            const userMenuDisplay = document.getElementById('user-menu-display');
+            const userDisplay = document.getElementById('user-display');
+            if (userMenuDisplay && userDisplay) {
+                userMenuDisplay.textContent = userDisplay.textContent;
+            }
         }
 
-        // Close user menu when clicking outside
+        // Close dropdowns when clicking outside
         document.addEventListener('click', function(e) {
-            if (!e.target.closest('.user-profile')) {
-                document.getElementById('userDropdownMenu').classList.remove('show');
+            // Close language menu
+            if (!e.target.closest('.language-dropdown')) {
+                document.getElementById('language-menu')?.classList.remove('show');
+            }
+            
+            // Close user menu
+            if (!e.target.closest('.user-profile') && !e.target.closest('.header-user-dropdown')) {
+                document.getElementById('userDropdownMenu')?.classList.remove('show');
+            }
+            
+            // Close notification menu
+            if (!e.target.closest('.notification-dropdown')) {
+                document.getElementById('notification-menu')?.classList.remove('show');
+            }
+        });
+
+        // Add smooth transitions to sidebar on mobile
+        window.addEventListener('resize', function() {
+            const sidebar = document.querySelector('.sidebar-nav');
+            if (window.innerWidth >= 992 && sidebar) {
+                sidebar.classList.remove('open');
             }
         });
     </script>

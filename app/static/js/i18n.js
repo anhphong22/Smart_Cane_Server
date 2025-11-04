@@ -33,6 +33,14 @@ const translations = {
         'dashboard.map': 'Bản Đồ Trực Tiếp',
         'dashboard.device': 'Thiết Bị',
         'dashboard.analytics': 'Phân Tích',
+        
+        // Menu
+        'menu.main': 'Menu Chính',
+        'menu.profile': 'Hồ Sơ',
+        'menu.preferences': 'Tùy Chọn',
+        'menu.logout': 'Đăng Xuất',
+        'menu.help': 'Trợ Giúp & Hỗ Trợ',
+        'menu.quick_actions': 'Thao Tác Nhanh',
 
         // Device Status
         'device.status': 'Trạng Thái Thiết Bị',
@@ -68,6 +76,10 @@ const translations = {
         'button.hide_route': 'Ẩn Tuyến Đường',
         'button.export': 'Xuất Dữ Liệu',
         'button.settings': 'Cài Đặt',
+        
+        // Notifications
+        'notifications.title': 'Thông báo',
+        'notifications.empty': 'Không có thông báo mới',
 
         // Activity Log
         'activity.title': 'Nhật Ký Hoạt Động',
@@ -153,6 +165,8 @@ const translations = {
         'stats.distance_today': 'Quãng Đường Hôm Nay',
         'stats.active_time': 'Thời Gian Hoạt Động',
         'stats.alerts_today': 'Cảnh Báo Hôm Nay',
+        'stats.locations': 'Vị trí',
+        'stats.alerts': 'Cảnh báo',
 
         // Empty States
         'empty.device.title': 'Chưa Có Thiết Bị Kết Nối',
@@ -197,6 +211,14 @@ const translations = {
         'dashboard.device': 'Device',
         'dashboard.analytics': 'Analytics',
         
+        // Menu
+        'menu.main': 'Main Menu',
+        'menu.profile': 'Profile',
+        'menu.preferences': 'Preferences',
+        'menu.logout': 'Logout',
+        'menu.help': 'Help & Support',
+        'menu.quick_actions': 'Quick Actions',
+        
         // Device Status
         'device.status': 'Device Status',
         'device.status.online': 'Online',
@@ -231,6 +253,10 @@ const translations = {
         'button.hide_route': 'Hide Route',
         'button.export': 'Export Data',
         'button.settings': 'Settings',
+        
+        // Notifications
+        'notifications.title': 'Notifications',
+        'notifications.empty': 'No new notifications',
         
         // Activity Log
         'activity.title': 'Activity Log',
@@ -317,6 +343,8 @@ const translations = {
         'stats.distance_today': 'Distance Today',
         'stats.active_time': 'Active Time',
         'stats.alerts_today': 'Alerts Today',
+        'stats.locations': 'Locations',
+        'stats.alerts': 'Alerts',
         
         // Empty States
         'empty.map.title': 'No GPS Data Available',
