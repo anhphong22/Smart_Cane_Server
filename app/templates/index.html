@@ -375,20 +375,109 @@
 
             <!-- Section: Map (Full View) -->
             <section class="content-section" id="section-map">
-                <div class="panel fullscreen-panel">
-                    <div class="panel-header">
-                        <h3 class="panel-title">
-                            <i class="fas fa-map-marked-alt"></i>
-                            <span data-i18n="map.title">Bản Đồ Trực Tiếp</span>
-                        </h3>
-                        <div class="panel-actions">
-                            <button class="btn-modern primary" onclick="fetchLocationDataManual()">
-                                <i class="fas fa-sync"></i>
-                                <span data-i18n="button.refresh">Làm Mới</span>
+                <div class="map-page-layout">
+                    <!-- Map Container -->
+                    <div class="map-main-container">
+                        <div id="map-fullscreen" class="map-full"></div>
+                        
+                        <!-- Map Floating Controls -->
+                        <div class="map-floating-controls">
+                            <button class="map-control-btn" onclick="fetchLocationDataManual()" data-i18n-title="button.get_gps">
+                                <i class="fas fa-location-arrow"></i>
+                            </button>
+                            <button class="map-control-btn" onclick="centerMap()" data-i18n-title="button.center_map">
+                                <i class="fas fa-crosshairs"></i>
+                            </button>
+                            <button class="map-control-btn" onclick="toggleMapFullscreen()" data-i18n-title="button.fullscreen">
+                                <i class="fas fa-expand"></i>
                             </button>
                         </div>
                     </div>
-                    <div id="map-fullscreen" class="map-container-full"></div>
+
+                    <!-- Map Info Sidebar -->
+                    <aside class="map-sidebar">
+                        <!-- Current Location Info -->
+                        <div class="map-info-card">
+                            <div class="map-info-header">
+                                <i class="fas fa-map-pin"></i>
+                                <h3 data-i18n="map.current_location">Vị Trí Hiện Tại</h3>
+                            </div>
+                            <div class="map-info-body">
+                                <div class="info-row">
+                                    <span class="info-label" data-i18n="gps.latitude">Vĩ độ</span>
+                                    <span class="info-value" id="map-lat">--</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-label" data-i18n="gps.longitude">Kinh độ</span>
+                                    <span class="info-value" id="map-lon">--</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-label" data-i18n="gps.last_update">Cập nhật</span>
+                                    <span class="info-value" id="map-time">--</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Quick Actions -->
+                        <div class="map-info-card">
+                            <div class="map-info-header">
+                                <i class="fas fa-bolt"></i>
+                                <h3 data-i18n="menu.quick_actions">Thao Tác Nhanh</h3>
+                            </div>
+                            <div class="map-actions">
+                                <button class="map-action-btn primary" onclick="fetchLocationDataManual()">
+                                    <i class="fas fa-location-arrow"></i>
+                                    <span data-i18n="button.get_gps">Lấy GPS</span>
+                                </button>
+                                <button class="map-action-btn secondary" onclick="centerMap()">
+                                    <i class="fas fa-crosshairs"></i>
+                                    <span data-i18n="button.center_map">Căn Giữa</span>
+                                </button>
+                                <button class="map-action-btn secondary" onclick="showRouteHistory()">
+                                    <i class="fas fa-route"></i>
+                                    <span data-i18n="route.title">Lịch Sử</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Route History -->
+                        <div class="map-info-card">
+                            <div class="map-info-header">
+                                <i class="fas fa-history"></i>
+                                <h3 data-i18n="route.title">Lịch Sử Tuyến Đường</h3>
+                            </div>
+                            <div class="map-info-body">
+                                <select id="map-route-hours" class="map-select">
+                                    <option value="1" data-i18n="route.last_hour">Giờ Qua</option>
+                                    <option value="6" data-i18n="route.last_6hours">6 Giờ Qua</option>
+                                    <option value="24" selected data-i18n="route.last_24hours">24 Giờ Qua</option>
+                                    <option value="168" data-i18n="route.last_week">Tuần Qua</option>
+                                </select>
+                                <button class="map-action-btn secondary full-width" onclick="showRouteHistory()">
+                                    <i class="fas fa-play"></i>
+                                    <span data-i18n="button.show_route">Hiển Thị</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Map Layers -->
+                        <div class="map-info-card">
+                            <div class="map-info-header">
+                                <i class="fas fa-layer-group"></i>
+                                <h3 data-i18n="map.layers">Lớp Bản Đồ</h3>
+                            </div>
+                            <div class="map-layers">
+                                <label class="map-layer-option">
+                                    <input type="radio" name="mapLayer" value="street" checked onchange="changeMapLayer(this.value)">
+                                    <span data-i18n="map.layer.street">Đường Phố</span>
+                                </label>
+                                <label class="map-layer-option">
+                                    <input type="radio" name="mapLayer" value="satellite" onchange="changeMapLayer(this.value)">
+                                    <span data-i18n="map.layer.satellite">Vệ Tinh</span>
+                                </label>
+                            </div>
+                        </div>
+                    </aside>
                 </div>
             </section>
 

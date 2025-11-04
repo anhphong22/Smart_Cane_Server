@@ -337,6 +337,9 @@ function updateUI(data, isRealTime = false) {
             source,
             isRealTime
         });
+        
+        // Update map page location display if on map page
+        updateMapPageLocation(latitude, longitude, timestamp_server);
 
         console.log(`✅ UI updated: ${latitude.toFixed(6)}, ${longitude.toFixed(6)}`);
     } catch (error) {
@@ -491,6 +494,54 @@ function toggleFullscreen() {
     } else {
         document.exitFullscreen();
         logActivity('Exited fullscreen mode', 'info');
+    }
+}
+
+/**
+ * Toggle map fullscreen (for map page)
+ */
+function toggleMapFullscreen() {
+    const mapContainer = document.querySelector('.map-main-container');
+    
+    if (!document.fullscreenElement && mapContainer) {
+        mapContainer.requestFullscreen().catch(err => {
+            console.error('Error attempting to enable fullscreen:', err);
+        });
+        logActivity('Map fullscreen enabled', 'info');
+    } else {
+        document.exitFullscreen();
+        logActivity('Map fullscreen disabled', 'info');
+    }
+}
+
+/**
+ * Change map layer
+ */
+function changeMapLayer(layerType) {
+    console.log('Changing map layer to:', layerType);
+    // The layer control is already built into the map initialization
+    // This function can be used for additional logic if needed
+    logActivity(`Map layer changed to ${layerType}`, 'info');
+}
+
+/**
+ * Update map page location display
+ */
+function updateMapPageLocation(latitude, longitude, timestamp) {
+    const mapLat = document.getElementById('map-lat');
+    const mapLon = document.getElementById('map-lon');
+    const mapTime = document.getElementById('map-time');
+    
+    if (mapLat) mapLat.textContent = latitude.toFixed(6);
+    if (mapLon) mapLon.textContent = longitude.toFixed(6);
+    if (mapTime) {
+        const dateTimeString = new Intl.DateTimeFormat('vi-VN', {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            timeZone: 'Asia/Ho_Chi_Minh'
+        }).format(new Date(timestamp));
+        mapTime.textContent = dateTimeString;
     }
 }
 
@@ -956,6 +1007,8 @@ window.addEventListener('beforeunload', () => {
 window.fetchLocationDataManual = fetchLocationDataManual;
 window.centerMap = centerMap;
 window.toggleFullscreen = toggleFullscreen;
+window.toggleMapFullscreen = toggleMapFullscreen;
+window.changeMapLayer = changeMapLayer;
 window.clearActivityLog = clearActivityLog;
 window.toggleTheme = toggleTheme;
 window.logout = logout;

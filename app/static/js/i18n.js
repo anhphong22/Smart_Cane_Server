@@ -131,6 +131,10 @@ const translations = {
 
         // Map
         'map.title': 'Bản Đồ Vị Trí Trực Tiếp',
+        'map.current_location': 'Vị Trí Hiện Tại',
+        'map.layers': 'Lớp Bản Đồ',
+        'map.layer.street': 'Đường Phố',
+        'map.layer.satellite': 'Vệ Tinh',
         'map.loading': 'Đang tải bản đồ...',
         'map.zoom_in': 'Phóng to',
         'map.zoom_out': 'Thu nhỏ',
@@ -345,6 +349,13 @@ const translations = {
         'stats.alerts_today': 'Alerts Today',
         'stats.locations': 'Locations',
         'stats.alerts': 'Alerts',
+        
+        // Map Page
+        'map.title': 'Live Map',
+        'map.current_location': 'Current Location',
+        'map.layers': 'Map Layers',
+        'map.layer.street': 'Street',
+        'map.layer.satellite': 'Satellite',
         
         // Empty States
         'empty.map.title': 'No GPS Data Available',
