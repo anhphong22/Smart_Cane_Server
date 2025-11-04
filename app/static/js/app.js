@@ -337,9 +337,6 @@ function updateUI(data, isRealTime = false) {
             source,
             isRealTime
         });
-        
-        // Update map page location display if on map page
-        updateMapPageLocation(latitude, longitude, timestamp_server);
 
         console.log(`✅ UI updated: ${latitude.toFixed(6)}, ${longitude.toFixed(6)}`);
     } catch (error) {
@@ -1007,8 +1004,6 @@ window.addEventListener('beforeunload', () => {
 window.fetchLocationDataManual = fetchLocationDataManual;
 window.centerMap = centerMap;
 window.toggleFullscreen = toggleFullscreen;
-window.toggleMapFullscreen = toggleMapFullscreen;
-window.changeMapLayer = changeMapLayer;
 window.clearActivityLog = clearActivityLog;
 window.toggleTheme = toggleTheme;
 window.logout = logout;
