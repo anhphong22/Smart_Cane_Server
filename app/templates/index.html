@@ -55,35 +55,11 @@
                 <i class="fas fa-chart-bar"></i>
                 <span data-i18n="dashboard.analytics">Phân Tích</span>
             </a>
+            <a href="#" class="menu-item menu-item-logout" onclick="event.preventDefault(); logout();">
+                <i class="fas fa-sign-out-alt"></i>
+                <span data-i18n="user.logout">Đăng Xuất</span>
+            </a>
         </nav>
-
-        <div class="sidebar-footer">
-            <div class="user-profile" onclick="toggleUserMenu()">
-                <div class="user-avatar">
-                    <i class="fas fa-user"></i>
-                </div>
-                <div class="user-details">
-                    <div id="user-display" class="user-name">User</div>
-                </div>
-                <i class="fas fa-ellipsis-v user-menu-icon"></i>
-            </div>
-
-            <div class="user-dropdown-menu" id="userDropdownMenu">
-                <a href="#profile" class="user-menu-item">
-                    <i class="fas fa-user-circle"></i>
-                    <span data-i18n="menu.profile">Profile</span>
-                </a>
-                <a href="#preferences" class="user-menu-item">
-                    <i class="fas fa-cog"></i>
-                    <span data-i18n="menu.preferences">Preferences</span>
-                </a>
-                <div class="user-menu-divider"></div>
-                <a href="#" class="user-menu-item logout" onclick="logout(); return false;">
-                    <i class="fas fa-sign-out-alt"></i>
-                    <span data-i18n="menu.logout">Logout</span>
-                </a>
-            </div>
-        </div>
     </aside>
 
     <!-- Main Content -->
