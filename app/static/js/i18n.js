@@ -6,156 +6,167 @@
 const translations = {
     vi: {
         // Header & Navigation
-        'app.title': 'G?y Th?ng Minh GPS',
-        'app.subtitle': 'H? Th?ng Gi?m S?t GPS Th?i Gian Th?c',
-        'theme.toggle': '??i ch? ??',
-        'user.logout': '??ng xu?t',
-        'language': 'Ng?n ng?',
-        
+        'app.title': 'Gậy Thông Minh GPS',
+        'app.subtitle': 'Hệ Thống Giám Sát GPS Thời Gian Thực',
+        'theme.toggle': 'Đổi chế độ',
+        'user.logout': 'Đăng xuất',
+        'language': 'Ngôn ngữ',
+
         // Login Page
-        'login.title': '??ng Nh?p',
-        'login.subtitle': 'H? Th?ng Gi?m S?t GPS An To?n',
-        'login.username': 'T?n ??ng nh?p',
-        'login.password': 'M?t kh?u',
-        'login.username.placeholder': 'Nh?p t?n ??ng nh?p',
-        'login.password.placeholder': 'Nh?p m?t kh?u',
-        'login.button': '??ng Nh?p',
-        'login.logging_in': '?ang ??ng nh?p...',
-        'login.demo.title': 'T?i Kho?n Demo',
-        'login.demo.username': 'T?n ??ng nh?p',
-        'login.demo.password': 'M?t kh?u',
-        'login.error.default': '??ng nh?p th?t b?i. Vui l?ng ki?m tra th?ng tin.',
-        'login.error.network': 'L?i m?ng. Vui l?ng th? l?i.',
-        'login.footer': 'G?y Th?ng Minh GPS v2.0 ? An To?n & Hi?n ??i',
-        
+        'login.title': 'Đăng Nhập',
+        'login.subtitle': 'Hệ Thống Giám Sát GPS An Toàn',
+        'login.username': 'Tên đăng nhập',
+        'login.password': 'Mật khẩu',
+        'login.username.placeholder': 'Nhập tên đăng nhập',
+        'login.password.placeholder': 'Nhập mật khẩu',
+        'login.button': 'Đăng Nhập',
+        'login.logging_in': 'Đang đăng nhập...',
+        'login.demo.title': 'Tài Khoản Demo',
+        'login.demo.username': 'Tên đăng nhập',
+        'login.demo.password': 'Mật khẩu',
+        'login.error.default': 'Đăng nhập thất bại. Vui lòng kiểm tra thông tin.',
+        'login.error.network': 'Lỗi mạng. Vui lòng thử lại.',
+        'login.footer': 'Gậy Thông Minh GPS v2.0 – An Toàn & Hiện Đại',
+
         // Dashboard Sections
-        'dashboard.overview': 'T?ng Quan',
-        'dashboard.map': 'B?n ?? Tr?c Ti?p',
-        'dashboard.device': 'Thi?t B?',
-        'dashboard.analytics': 'Ph?n T?ch',
-        
+        'dashboard.overview': 'Tổng Quan',
+        'dashboard.map': 'Bản Đồ Trực Tiếp',
+        'dashboard.device': 'Thiết Bị',
+        'dashboard.analytics': 'Phân Tích',
+
         // Device Status
-        'device.status': 'Tr?ng Th?i Thi?t B?',
-        'device.status.online': 'Tr?c tuy?n',
-        'device.status.offline': 'Ngo?i tuy?n',
-        'device.status.realtime': 'GPS th?i gian th?c',
-        'device.id': 'ID Thi?t B?',
+        'device.status': 'Trạng Thái Thiết Bị',
+        'device.status.online': 'Trực tuyến',
+        'device.status.offline': 'Ngoại tuyến',
+        'device.status.realtime': 'GPS thời gian thực',
+        'device.id': 'ID Thiết Bị',
         'device.battery': 'Pin',
-        'device.signal': 'T?n hi?u',
-        
+        'device.signal': 'Tín hiệu',
+
         // GPS Information
-        'gps.latitude': 'V? ??',
-        'gps.longitude': 'Kinh ??',
-        'gps.altitude': '?? Cao',
-        'gps.speed': 'T?c ??',
-        'gps.accuracy': '?? Ch?nh X?c',
-        'gps.last_update': 'C?p Nh?t L?n Cu?i',
-        'gps.satellites': 'V? Tinh',
-        
+        'gps.latitude': 'Vĩ độ',
+        'gps.longitude': 'Kinh độ',
+        'gps.altitude': 'Độ Cao',
+        'gps.speed': 'Tốc độ',
+        'gps.accuracy': 'Độ Chính Xác',
+        'gps.last_update': 'Cập Nhật Lần Cuối',
+        'gps.satellites': 'Vệ Tinh',
+
         // Sync Status
-        'sync.auto': 'T? ??ng ??ng B?',
-        'sync.live': 'D? Li?u Tr?c Ti?p',
-        'sync.syncing': '?ang ??ng b?...',
-        'sync.last': '??ng b? l?n cu?i',
-        
+        'sync.auto': 'Tự Động Đồng Bộ',
+        'sync.live': 'Dữ Liệu Trực Tiếp',
+        'sync.syncing': 'Đang đồng bộ...',
+        'sync.last': 'Đồng bộ lần cuối',
+
         // Buttons & Actions
-        'button.get_gps': 'L?y GPS Th?i Gian Th?c',
-        'button.center_map': 'C?n Gi?a B?n ??',
-        'button.fullscreen': 'To?n M?n H?nh',
-        'button.refresh': 'L?m M?i',
-        'button.clear': 'X?a',
-        'button.show_route': 'Hi?n Th? Tuy?n ???ng',
-        'button.hide_route': '?n Tuy?n ???ng',
-        'button.export': 'Xu?t D? Li?u',
-        'button.settings': 'C?i ??t',
-        
+        'button.get_gps': 'Lấy GPS Thời Gian Thực',
+        'button.center_map': 'Căn Giữa Bản Đồ',
+        'button.fullscreen': 'Toàn Màn Hình',
+        'button.refresh': 'Làm Mới',
+        'button.clear': 'Xóa',
+        'button.show_route': 'Hiển Thị Tuyến Đường',
+        'button.hide_route': 'Ẩn Tuyến Đường',
+        'button.export': 'Xuất Dữ Liệu',
+        'button.settings': 'Cài Đặt',
+
         // Activity Log
-        'activity.title': 'Nh?t K? Ho?t ??ng',
-        'activity.clear': 'X?a nh?t k?',
-        'activity.empty': 'Kh?ng c? ho?t ??ng n?o',
-        'activity.initialized': '?ng d?ng ?? kh?i t?o',
-        'activity.fetching': '?ang l?y d? li?u GPS...',
-        'activity.updated': 'V? tr? ?? c?p nh?t',
-        'activity.error': 'L?i khi l?y d? li?u',
-        
+        'activity.title': 'Nhật Ký Hoạt Động',
+        'activity.clear': 'Xóa nhật ký',
+        'activity.empty': 'Không có hoạt động nào',
+        'activity.initialized': 'Ứng dụng đã khởi tạo',
+        'activity.fetching': 'Đang lấy dữ liệu GPS...',
+        'activity.updated': 'Vị trí đã cập nhật',
+        'activity.error': 'Lỗi khi lấy dữ liệu',
+
         // Route History
-        'route.title': 'L?ch S? Tuy?n ???ng',
-        'route.period': 'Kho?ng Th?i Gian',
-        'route.last_hour': 'Gi? Qua',
-        'route.last_6hours': '6 Gi? Qua',
-        'route.last_24hours': '24 Gi? Qua',
-        'route.last_week': 'Tu?n Qua',
-        'route.last_month': 'Th?ng Qua',
-        'route.distance': 'Qu?ng ???ng',
-        'route.duration': 'Th?i Gian',
-        'route.avg_speed': 'T?c ?? TB',
-        'route.points': '?i?m',
-        'route.start': '?i?m ??u',
-        'route.end': '?i?m Cu?i',
-        'route.no_data': 'Kh?ng c? d? li?u tuy?n ???ng',
-        
+        'route.title': 'Lịch Sử Tuyến Đường',
+        'route.period': 'Khoảng Thời Gian',
+        'route.last_hour': 'Giờ Qua',
+        'route.last_6hours': '6 Giờ Qua',
+        'route.last_24hours': '24 Giờ Qua',
+        'route.last_week': 'Tuần Qua',
+        'route.last_month': 'Tháng Qua',
+        'route.distance': 'Quãng Đường',
+        'route.duration': 'Thời Gian',
+        'route.avg_speed': 'Tốc độ TB',
+        'route.points': 'Điểm',
+        'route.start': 'Điểm Đầu',
+        'route.end': 'Điểm Cuối',
+        'route.no_data': 'Không có dữ liệu tuyến đường',
+
         // Geofencing
-        'geofence.title': 'R?o C?n ??a L?',
-        'geofence.create': 'T?o R?o C?n',
-        'geofence.name': 'T?n',
-        'geofence.radius': 'B?n K?nh (m)',
-        'geofence.alert_enter': 'C?nh b?o khi v?o',
-        'geofence.alert_exit': 'C?nh b?o khi ra',
-        'geofence.active': 'Ho?t ??ng',
-        'geofence.alerts': 'C?nh B?o',
-        'geofence.alert.entered': '?? v?o r?o c?n',
-        'geofence.alert.exited': '?? r?i r?o c?n',
-        
+        'geofence.title': 'Rào Cản Địa Lý',
+        'geofence.create': 'Tạo Rào Cản',
+        'geofence.name': 'Tên',
+        'geofence.radius': 'Bán Kính (m)',
+        'geofence.alert_enter': 'Cảnh báo khi vào',
+        'geofence.alert_exit': 'Cảnh báo khi ra',
+        'geofence.active': 'Hoạt động',
+        'geofence.alerts': 'Cảnh Báo',
+        'geofence.alert.entered': 'Đã vào rào cản',
+        'geofence.alert.exited': 'Đã rời rào cản',
+
         // Analytics
-        'analytics.title': 'Ph?n T?ch',
-        'analytics.today': 'H?m Nay',
-        'analytics.week': 'Tu?n N?y',
-        'analytics.month': 'Th?ng N?y',
-        'analytics.total_distance': 'T?ng Qu?ng ???ng',
-        'analytics.total_time': 'T?ng Th?i Gian',
-        'analytics.avg_speed': 'T?c ?? Trung B?nh',
-        'analytics.max_speed': 'T?c ?? T?i ?a',
-        'analytics.trips': 'Chuy?n ?i',
-        
+        'analytics.title': 'Phân Tích',
+        'analytics.today': 'Hôm Nay',
+        'analytics.week': 'Tuần Này',
+        'analytics.month': 'Tháng Này',
+        'analytics.total_distance': 'Tổng Quãng Đường',
+        'analytics.total_time': 'Tổng Thời Gian',
+        'analytics.avg_speed': 'Tốc độ Trung Bình',
+        'analytics.max_speed': 'Tốc độ Tối Đa',
+        'analytics.trips': 'Chuyến đi',
+
         // Map
-        'map.title': 'B?n ?? V? Tr? Tr?c Ti?p',
-        'map.loading': '?ang t?i b?n ??...',
-        'map.zoom_in': 'Ph?ng to',
-        'map.zoom_out': 'Thu nh?',
-        'map.live_location': 'V? Tr? Tr?c Ti?p',
-        'map.stored_location': 'V? Tr? ?? L?u',
-        
+        'map.title': 'Bản Đồ Vị Trí Trực Tiếp',
+        'map.loading': 'Đang tải bản đồ...',
+        'map.zoom_in': 'Phóng to',
+        'map.zoom_out': 'Thu nhỏ',
+        'map.live_location': 'Vị Trí Trực Tiếp',
+        'map.stored_location': 'Vị Trí Đã Lưu',
+
         // Units
         'unit.km': 'km',
         'unit.m': 'm',
         'unit.kmh': 'km/h',
-        'unit.min': 'ph?t',
-        'unit.hour': 'gi?',
-        'unit.day': 'ng?y',
-        
+        'unit.min': 'phút',
+        'unit.hour': 'giờ',
+        'unit.day': 'ngày',
+
         // Time
-        'time.just_now': 'V?a xong',
-        'time.seconds_ago': 'gi?y tr??c',
-        'time.minutes_ago': 'ph?t tr??c',
-        'time.hours_ago': 'gi? tr??c',
-        'time.days_ago': 'ng?y tr??c',
-        
+        'time.just_now': 'Vừa xong',
+        'time.seconds_ago': 'giây trước',
+        'time.minutes_ago': 'phút trước',
+        'time.hours_ago': 'giờ trước',
+        'time.days_ago': 'ngày trước',
+
         // Messages
-        'message.success': 'Th?nh c?ng',
-        'message.error': 'L?i',
-        'message.warning': 'C?nh b?o',
-        'message.info': 'Th?ng tin',
-        'message.no_data': 'Kh?ng c? d? li?u',
-        'message.loading': '?ang t?i...',
-        
+        'message.success': 'Thành công',
+        'message.error': 'Lỗi',
+        'message.warning': 'Cảnh báo',
+        'message.info': 'Thông tin',
+        'message.no_data': 'Không có dữ liệu',
+        'message.loading': 'Đang tải...',
+
         // Quick Stats
-        'stats.title': 'Th?ng K? Nhanh',
-        'stats.locations_today': 'V? Tr? H?m Nay',
-        'stats.distance_today': 'Qu?ng ???ng H?m Nay',
-        'stats.active_time': 'Th?i Gian Ho?t ??ng',
-        'stats.alerts_today': 'C?nh B?o H?m Nay'
+        'stats.locations_today': 'Vị Trí Hôm Nay',
+        'stats.distance_today': 'Quãng Đường Hôm Nay',
+        'stats.active_time': 'Thời Gian Hoạt Động',
+        'stats.alerts_today': 'Cảnh Báo Hôm Nay',
+
+        // Empty States
+        'empty.device.title': 'Chưa Có Thiết Bị Kết Nối',
+        'empty.device.description': 'Thiết bị GPS chưa được kết nối hoặc chưa gửi dữ liệu. Vui lòng kiểm tra kết nối thiết bị và thử lại.',
+        'empty.device.tip': 'Mẹo: Đảm bảo thiết bị đã bật và có kết nối internet.',
+        'empty.analytics.title': 'Chưa Có Dữ Liệu Phân Tích',
+        'empty.analytics.description': 'Dữ liệu phân tích sẽ xuất hiện khi thiết bị bắt đầu gửi thông tin vị trí. Hãy kiểm tra lại sau.',
+        'empty.analytics.feature1': 'Quãng đường di chuyển',
+        'empty.analytics.feature2': 'Thời gian hoạt động',
+        'empty.analytics.feature3': 'Tốc độ trung bình',
+        'empty.analytics.feature4': 'Địa điểm thường xuyên',
+        'empty.map.title': 'Chưa có dữ liệu GPS',
+        'empty.map.description': 'Để bắt đầu, hãy nhấn nút "Lấy GPS" hoặc đợi đồng bộ tự động.',
     },
-    
     en: {
         // Header & Navigation
         'app.title': 'Smart Cane GPS',
@@ -178,7 +189,7 @@ const translations = {
         'login.demo.password': 'Password',
         'login.error.default': 'Login failed. Please check your credentials.',
         'login.error.network': 'Network error. Please try again.',
-        'login.footer': 'Smart Cane GPS v2.0 ? Secure & Modern',
+        'login.footer': 'Smart Cane GPS v2.0 – Secure & Modern',
         
         // Dashboard Sections
         'dashboard.overview': 'Overview',
@@ -411,7 +422,7 @@ class I18nManager {
      */
     getLanguageName(code) {
         const names = {
-            'vi': 'Ti?ng Vi?t',
+            'vi': 'Tiếng Việt',
             'en': 'English'
         };
         return names[code] || code;

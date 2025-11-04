@@ -1,21 +1,21 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title data-i18n="login.title">Đăng Nhập - Smart Cane GPS</title>
-    
+
     <!-- Google Fonts - Optimized Loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@600;700&family=Noto+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
     <noscript>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@600;700&family=Noto+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     </noscript>
-    
+
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <style>
         * {
             margin: 0;
@@ -43,7 +43,7 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', 'Noto Sans', sans-serif;
             background: var(--gradient-3);
             min-height: 100vh;
             display: flex;
@@ -139,7 +139,7 @@
         }
 
         .brand-title {
-            font-family: 'Space Grotesk', sans-serif;
+            font-family: 'Noto Sans', sans-serif;
             font-size: 2.5rem;
             font-weight: 700;
             margin-bottom: 1rem;
@@ -147,6 +147,7 @@
         }
 
         .brand-subtitle {
+            font-family: 'Inter', 'Noto Sans', sans-serif;
             font-size: 1.125rem;
             opacity: 0.95;
             margin-bottom: 2rem;
@@ -164,6 +165,7 @@
             display: flex;
             align-items: center;
             gap: 0.75rem;
+            font-family: 'Noto Sans', sans-serif;
             font-size: 0.95rem;
         }
 
@@ -191,7 +193,7 @@
         }
 
         .login-title {
-            font-family: 'Space Grotesk', sans-serif;
+            font-family: 'Noto Sans', sans-serif;
             font-size: 2rem;
             font-weight: 700;
             color: var(--text-dark);
@@ -199,38 +201,128 @@
         }
 
         .login-description {
+            font-family: 'Noto Sans', sans-serif;
             color: var(--text-light);
             font-size: 0.95rem;
         }
 
-        /* Language Switcher */
+        /* Language Switcher Dropdown */
         .language-switcher {
-            display: flex;
-            gap: 0.5rem;
+            position: relative;
             margin-bottom: 1.5rem;
         }
 
-        .lang-btn {
-            padding: 0.5rem 1rem;
-            border: 2px solid #e5e7eb;
-            background: transparent;
-            border-radius: 8px;
-            font-size: 0.875rem;
-            font-weight: 600;
-            color: var(--text-light);
-            cursor: pointer;
-            transition: all 0.2s;
+        .language-dropdown {
+            position: relative;
+            width: 100%;
         }
 
-        .lang-btn.active {
+        .language-current {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e5e7eb;
+            background: var(--white);
+            border-radius: 8px;
+            font-family: 'Inter', 'Noto Sans', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .language-current:hover {
+            border-color: var(--primary-light);
+        }
+
+        .language-current.active {
             border-color: var(--primary);
+        }
+
+        .language-selected {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .language-icon {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .dropdown-arrow {
+            transition: transform 0.2s;
+            color: var(--text-light);
+        }
+
+        .dropdown-arrow.open {
+            transform: rotate(180deg);
+        }
+
+        .language-options {
+            position: absolute;
+            top: calc(100% + 0.5rem);
+            left: 0;
+            right: 0;
+            background: var(--white);
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            box-shadow: var(--shadow-lg);
+            display: none;
+            z-index: 100;
+            overflow: hidden;
+        }
+
+        .language-options.show {
+            display: block;
+            animation: slideDown 0.2s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .language-option {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: none;
+            background: transparent;
+            text-align: left;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: 'Inter', 'Noto Sans', sans-serif;
+            font-size: 0.875rem;
+            color: var(--text-dark);
+        }
+
+        .language-option:hover {
+            background: var(--bg-light);
+        }
+
+        .language-option.active {
             background: var(--primary);
             color: var(--white);
         }
 
-        .lang-btn:hover:not(.active) {
-            border-color: var(--primary-light);
-            color: var(--primary);
+        .language-option.active .language-icon {
+            color: var(--white);
         }
 
         .login-form {
@@ -246,6 +338,7 @@
         }
 
         .form-label {
+            font-family: 'Inter', 'Noto Sans', sans-serif;
             font-size: 0.875rem;
             font-weight: 600;
             color: var(--text-dark);
@@ -271,7 +364,7 @@
             border: 2px solid #e5e7eb;
             border-radius: 12px;
             transition: all 0.2s;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', 'Noto Sans', sans-serif;
         }
 
         .form-input:focus {
@@ -282,6 +375,7 @@
 
         .form-input::placeholder {
             color: #9ca3af;
+            font-family: 'Inter', 'Noto Sans', sans-serif;
         }
 
         .login-button {
@@ -291,6 +385,7 @@
             color: var(--white);
             border: none;
             border-radius: 12px;
+            font-family: 'Inter', 'Noto Sans', sans-serif;
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
@@ -322,6 +417,7 @@
             color: #991b1b;
             padding: 1rem;
             border-radius: 12px;
+            font-family: 'Inter', 'Noto Sans', sans-serif;
             font-size: 0.875rem;
             display: none;
             align-items: center;
@@ -346,6 +442,7 @@
             align-items: center;
             gap: 0.5rem;
             margin-bottom: 0.75rem;
+            font-family: 'Inter', 'Noto Sans', sans-serif;
             font-size: 0.875rem;
         }
 
@@ -353,6 +450,7 @@
             display: flex;
             flex-direction: column;
             gap: 0.5rem;
+            font-family: 'Inter', 'Noto Sans', sans-serif;
             font-size: 0.875rem;
             color: var(--text-light);
         }
@@ -361,13 +459,19 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .demo-item span {
+            font-family: 'Inter', 'Noto Sans', sans-serif;
         }
 
         .demo-item code {
             background: var(--white);
             padding: 0.25rem 0.75rem;
             border-radius: 6px;
-            font-family: 'Monaco', monospace;
+            font-family: 'Monaco', 'Courier New', monospace;
             font-size: 0.875rem;
             color: var(--text-dark);
             border: 1px solid #e5e7eb;
@@ -378,11 +482,12 @@
             margin-top: 2rem;
             padding-top: 2rem;
             border-top: 1px solid #e5e7eb;
+            font-family: 'Inter', 'Noto Sans', sans-serif;
             font-size: 0.875rem;
             color: var(--text-light);
         }
 
-        /* Responsive Design */
+        /* Enhanced Responsive Design for Mobile */
         @media (max-width: 968px) {
             .login-brand {
                 display: none;
@@ -391,19 +496,268 @@
             .login-container {
                 padding: 2rem;
             }
+
+            .login-wrapper {
+                border-radius: 16px;
+            }
         }
 
-        @media (max-width: 480px) {
+        @media (max-width: 640px) {
+            body {
+                padding: 0.5rem;
+            }
+
+            .login-wrapper {
+                border-radius: 12px;
+            }
+
             .login-container {
                 padding: 1.5rem;
             }
 
-            .brand-title {
-                font-size: 2rem;
+            .login-title {
+                font-size: 1.75rem;
+            }
+
+            .login-description {
+                font-size: 0.875rem;
+            }
+
+            .language-current {
+                padding: 0.625rem 0.875rem;
+                font-size: 0.8125rem;
+            }
+
+            .language-option {
+                padding: 0.625rem 0.875rem;
+                font-size: 0.8125rem;
+            }
+
+            .form-label {
+                font-size: 0.8125rem;
+            }
+
+            .form-input {
+                padding: 0.75rem 0.875rem 0.75rem 2.75rem;
+                font-size: 0.9375rem;
+            }
+
+            .input-icon {
+                left: 0.875rem;
+                font-size: 0.875rem;
+            }
+
+            .login-button {
+                padding: 0.875rem;
+                font-size: 0.9375rem;
+            }
+
+            .demo-credentials {
+                padding: 0.875rem;
+            }
+
+            .demo-credentials strong {
+                font-size: 0.8125rem;
+            }
+
+            .demo-info {
+                font-size: 0.8125rem;
+            }
+
+            .demo-item {
+                gap: 0.25rem;
+            }
+
+            .demo-item code {
+                font-size: 0.8125rem;
+                padding: 0.1875rem 0.625rem;
+            }
+
+            .login-footer {
+                font-size: 0.8125rem;
+                margin-top: 1.5rem;
+                padding-top: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 0;
+            }
+
+            .login-wrapper {
+                border-radius: 0;
+                min-height: 100vh;
+            }
+
+            .login-container {
+                padding: 1.25rem;
+                justify-content: flex-start;
+                padding-top: 2rem;
+            }
+
+            .login-header {
+                margin-bottom: 1.5rem;
             }
 
             .login-title {
                 font-size: 1.5rem;
+            }
+
+            .login-description {
+                font-size: 0.8125rem;
+            }
+
+            .language-switcher {
+                margin-bottom: 1.25rem;
+            }
+
+            .language-current {
+                padding: 0.625rem 0.75rem;
+                font-size: 0.8125rem;
+            }
+
+            .language-icon {
+                font-size: 1.125rem;
+            }
+
+            .login-form {
+                gap: 1rem;
+            }
+
+            .form-group {
+                gap: 0.375rem;
+            }
+
+            .form-label {
+                font-size: 0.8125rem;
+            }
+
+            .form-input {
+                padding: 0.75rem 0.75rem 0.75rem 2.5rem;
+                font-size: 0.9375rem;
+                border-radius: 10px;
+            }
+
+            .input-icon {
+                left: 0.75rem;
+                font-size: 0.875rem;
+            }
+
+            .login-button {
+                padding: 0.875rem;
+                font-size: 0.9375rem;
+                border-radius: 10px;
+                margin-top: 0.25rem;
+            }
+
+            .error-message {
+                padding: 0.875rem;
+                font-size: 0.8125rem;
+            }
+
+            .demo-credentials {
+                padding: 0.875rem;
+                margin-top: 1.25rem;
+            }
+
+            .demo-credentials strong {
+                font-size: 0.8125rem;
+                margin-bottom: 0.625rem;
+            }
+
+            .demo-info {
+                font-size: 0.8125rem;
+                gap: 0.375rem;
+            }
+
+            .demo-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.25rem;
+            }
+
+            .demo-item code {
+                font-size: 0.8125rem;
+                padding: 0.1875rem 0.5rem;
+            }
+
+            .login-footer {
+                font-size: 0.75rem;
+                margin-top: 1.25rem;
+                padding-top: 1.25rem;
+            }
+        }
+
+        /* Landscape orientation optimization for mobile */
+        @media (max-height: 600px) and (orientation: landscape) {
+            .login-wrapper {
+                border-radius: 0;
+            }
+
+            .login-container {
+                padding: 1rem;
+                justify-content: flex-start;
+            }
+
+            .login-header {
+                margin-bottom: 1rem;
+            }
+
+            .login-title {
+                font-size: 1.25rem;
+            }
+
+            .login-description {
+                font-size: 0.75rem;
+            }
+
+            .language-switcher {
+                margin-bottom: 0.875rem;
+            }
+
+            .login-form {
+                gap: 0.75rem;
+            }
+
+            .form-group {
+                gap: 0.25rem;
+            }
+
+            .demo-credentials {
+                margin-top: 0.875rem;
+            }
+
+            .login-footer {
+                margin-top: 0.875rem;
+                padding-top: 0.875rem;
+                font-size: 0.6875rem;
+            }
+        }
+
+        /* Touch device optimizations */
+        @media (hover: none) and (pointer: coarse) {
+            .language-current,
+            .language-option,
+            .login-button,
+            .form-input {
+                min-height: 44px;
+            }
+
+            .login-button:hover {
+                transform: none;
+            }
+
+            .login-button:active {
+                transform: scale(0.98);
+            }
+
+            .language-option:hover {
+                background: transparent;
+            }
+
+            .language-option:active {
+                background: var(--bg-light);
             }
         }
     </style>
@@ -417,24 +771,24 @@
                     <i class="fas fa-walking"></i>
                 </div>
                 <h1 class="brand-title" data-i18n="app.title">Gậy Thông Minh GPS</h1>
-                <p class="brand-subtitle" data-i18n="app.subtitle">H? Th?ng Gi?m S?t GPS Th?i Gian Th?c</p>
-                
+                <p class="brand-subtitle" data-i18n="app.subtitle">Hệ Thống Giám Sát GPS Thời Gian Thực</p>
+
                 <div class="brand-features">
                     <div class="feature-item">
                         <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
-                        <span data-i18n="feature.secure">An to?n & b?o m?t cao</span>
+                        <span data-i18n="feature.secure">An toàn & bảo mật cao</span>
                     </div>
                     <div class="feature-item">
                         <div class="feature-icon"><i class="fas fa-map-marked-alt"></i></div>
-                        <span data-i18n="feature.realtime">Gi?m s?t th?i gian th?c</span>
+                        <span data-i18n="feature.realtime">Giám sát thời gian thực</span>
                     </div>
                     <div class="feature-item">
                         <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
-                        <span data-i18n="feature.analytics">Ph?n t?ch th?ng minh</span>
+                        <span data-i18n="feature.analytics">Phân tích thông minh</span>
                     </div>
                     <div class="feature-item">
                         <div class="feature-icon"><i class="fas fa-mobile-alt"></i></div>
-                        <span data-i18n="feature.responsive">T??ng th?ch m?i thi?t b?</span>
+                        <span data-i18n="feature.responsive">Tương thích mọi thiết bị</span>
                     </div>
                 </div>
             </div>
@@ -444,17 +798,30 @@
         <div class="login-container">
             <div class="login-header">
                 <h2 class="login-title" data-i18n="login.title">Đăng Nhập</h2>
-                <p class="login-description" data-i18n="login.subtitle">H? Th?ng Gi?m S?t GPS An To?n</p>
+                <p class="login-description" data-i18n="login.subtitle">Hệ Thống Giám Sát GPS An Toàn</p>
             </div>
 
-            <!-- Language Switcher -->
+            <!-- Language Switcher Dropdown -->
             <div class="language-switcher">
-                <button class="lang-btn active" onclick="changeLanguage('vi')" id="lang-vi">
-                    ???? Tiếng Việt
-                </button>
-                <button class="lang-btn" onclick="changeLanguage('en')" id="lang-en">
-                    ???? English
-                </button>
+                <div class="language-dropdown">
+                    <button type="button" class="language-current" onclick="toggleLanguageDropdown()" id="language-btn">
+                        <div class="language-selected">
+                            <span class="language-icon" id="current-flag">🇻🇳</span>
+                            <span id="current-language">Tiếng Việt</span>
+                        </div>
+                        <i class="fas fa-chevron-down dropdown-arrow"></i>
+                    </button>
+                    <div class="language-options" id="language-options">
+                        <button type="button" class="language-option active" onclick="changeLanguage('vi')" data-lang="vi">
+                            <span class="language-icon">🇻🇳</span>
+                            <span>Tiếng Việt</span>
+                        </button>
+                        <button type="button" class="language-option" onclick="changeLanguage('en')" data-lang="en">
+                            <span class="language-icon">🇬🇧</span>
+                            <span>English</span>
+                        </button>
+                    </div>
+                </div>
             </div>
 
             <form class="login-form" onsubmit="handleLogin(event)">
@@ -464,16 +831,16 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label" for="username" data-i18n="login.username">T?n ??ng nh?p</label>
+                    <label class="form-label" for="username" data-i18n="login.username">Tên đăng nhập</label>
                     <div class="input-wrapper">
                         <i class="fas fa-user input-icon"></i>
-                        <input 
-                            type="text" 
-                            id="username" 
-                            name="username" 
-                            class="form-input" 
+                        <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            class="form-input"
                             data-i18n-placeholder="login.username.placeholder"
-                            placeholder="Nh?p t?n ??ng nh?p"
+                            placeholder="Nhập tên đăng nhập"
                             required
                             autocomplete="username"
                         >
@@ -481,16 +848,16 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label" for="password" data-i18n="login.password">M?t kh?u</label>
+                    <label class="form-label" for="password" data-i18n="login.password">Mật khẩu</label>
                     <div class="input-wrapper">
                         <i class="fas fa-lock input-icon"></i>
-                        <input 
-                            type="password" 
-                            id="password" 
-                            name="password" 
-                            class="form-input" 
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            class="form-input"
                             data-i18n-placeholder="login.password.placeholder"
-                            placeholder="Nh?p m?t kh?u"
+                            placeholder="Nhập mật khẩu"
                             required
                             autocomplete="current-password"
                         >
@@ -505,15 +872,15 @@
                 <div class="demo-credentials">
                     <strong>
                         <i class="fas fa-key"></i>
-                        <span data-i18n="login.demo.title">T?i Kho?n Demo</span>
+                        <span data-i18n="login.demo.title">Tài Khoản Demo</span>
                     </strong>
                     <div class="demo-info">
                         <div class="demo-item">
-                            <span data-i18n="login.demo.username">T?n ??ng nh?p</span>
+                            <span data-i18n="login.demo.username">Tên đăng nhập</span>
                             <code>admin</code>
                         </div>
                         <div class="demo-item">
-                            <span data-i18n="login.demo.password">M?t kh?u</span>
+                            <span data-i18n="login.demo.password">Mật khẩu</span>
                             <code>admin123</code>
                         </div>
                     </div>
@@ -521,35 +888,53 @@
             </form>
 
             <div class="login-footer">
-                <span data-i18n="login.footer">Gậy Thông Minh GPS v2.0 ? An To?n & Hi?n ??i</span>
+                <span data-i18n="login.footer">Gậy Thông Minh GPS v2.0 – An Toàn & Hiện Đại</span>
             </div>
         </div>
     </div>
 
     <!-- Load i18n first -->
     <script src="/static/js/i18n.js"></script>
-    
+
     <script>
         // Initialize language
         const savedLang = i18n.getLanguage();
         document.documentElement.lang = savedLang;
-        
-        // Update active language button
-        document.querySelectorAll('.lang-btn').forEach(btn => {
-            btn.classList.remove('active');
+
+        // Language display names
+        const languageNames = {
+            'vi': 'Tiếng Việt',
+            'en': 'English'
+        };
+
+        // Language flags
+        const languageFlags = {
+            'vi': '🇻🇳',
+            'en': '🇬🇧'
+        };
+
+        // Update current language display
+        document.getElementById('current-language').textContent = languageNames[savedLang];
+        document.getElementById('current-flag').textContent = languageFlags[savedLang];
+
+        // Update active language option
+        document.querySelectorAll('.language-option').forEach(option => {
+            option.classList.remove('active');
+            if (option.getAttribute('data-lang') === savedLang) {
+                option.classList.add('active');
+            }
         });
-        document.getElementById(`lang-${savedLang}`).classList.add('active');
-        
+
         // Apply translations
         i18n.updatePageTranslations();
-        
+
         // Add missing translations for brand features
         const featureTranslations = {
             vi: {
-                'feature.secure': 'An to?n & b?o m?t cao',
-                'feature.realtime': 'Gi?m s?t th?i gian th?c',
-                'feature.analytics': 'Ph?n t?ch th?ng minh',
-                'feature.responsive': 'T??ng th?ch m?i thi?t b?'
+                'feature.secure': 'An toàn & bảo mật cao',
+                'feature.realtime': 'Giám sát thời gian thực',
+                'feature.analytics': 'Phân tích thông minh',
+                'feature.responsive': 'Tương thích mọi thiết bị'
             },
             en: {
                 'feature.secure': 'Secure & Protected',
@@ -558,47 +943,77 @@
                 'feature.responsive': 'Cross-device Compatible'
             }
         };
-        
+
         // Update feature translations
         document.querySelectorAll('[data-i18n^="feature."]').forEach(el => {
             const key = el.getAttribute('data-i18n');
             el.textContent = featureTranslations[savedLang][key] || el.textContent;
         });
-        
+
+        // Toggle language dropdown
+        function toggleLanguageDropdown() {
+            const dropdown = document.getElementById('language-options');
+            const arrow = document.querySelector('.dropdown-arrow');
+            const btn = document.getElementById('language-btn');
+
+            dropdown.classList.toggle('show');
+            arrow.classList.toggle('open');
+            btn.classList.toggle('active');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.querySelector('.language-dropdown');
+            if (!dropdown.contains(event.target)) {
+                document.getElementById('language-options').classList.remove('show');
+                document.querySelector('.dropdown-arrow').classList.remove('open');
+                document.getElementById('language-btn').classList.remove('active');
+            }
+        });
+
         function changeLanguage(lang) {
             i18n.setLanguage(lang);
             document.documentElement.lang = lang;
-            
-            // Update active button
-            document.querySelectorAll('.lang-btn').forEach(btn => {
-                btn.classList.remove('active');
+
+            // Update current language display
+            document.getElementById('current-language').textContent = languageNames[lang];
+            document.getElementById('current-flag').textContent = languageFlags[lang];
+
+            // Update active option
+            document.querySelectorAll('.language-option').forEach(option => {
+                option.classList.remove('active');
+                if (option.getAttribute('data-lang') === lang) {
+                    option.classList.add('active');
+                }
             });
-            document.getElementById(`lang-${lang}`).classList.add('active');
-            
+
             // Update feature translations
             document.querySelectorAll('[data-i18n^="feature."]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
                 el.textContent = featureTranslations[lang][key] || el.textContent;
             });
+
+            // Close dropdown
+            toggleLanguageDropdown();
         }
-        
+
         async function handleLogin(event) {
             event.preventDefault();
-            
+
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             const loginBtn = document.getElementById('login-btn');
             const errorMsg = document.getElementById('error-message');
             const errorText = document.getElementById('error-text');
-            
+
             // Hide error message
             errorMsg.classList.remove('show');
-            
+
             // Disable button
             loginBtn.disabled = true;
             const btnText = loginBtn.querySelector('span');
             btnText.textContent = i18n.t('login.logging_in');
-            
+
             try {
                 const response = await fetch('/auth/login', {
                     method: 'POST',
@@ -607,14 +1022,14 @@
                     },
                     body: JSON.stringify({ username, password })
                 });
-                
+
                 const data = await response.json();
-                
+
                 if (response.ok) {
                     // Save token to localStorage
                     localStorage.setItem('access_token', data.access_token);
                     localStorage.setItem('user', JSON.stringify(data.user));
-                    
+
                     // Redirect to map
                     window.location.href = '/map';
                 } else {
@@ -631,7 +1046,7 @@
                 btnText.textContent = i18n.t('login.button');
             }
         }
-        
+
         // Check if already logged in
         if (localStorage.getItem('access_token')) {
             window.location.href = '/map';

@@ -10,10 +10,10 @@ from fastapi.middleware.cors import CORSMiddleware
 import socket
 from pathlib import Path
 
-from .core.config import settings
-from .api.routes import router as main_router
-from .api.auth_routes import router as auth_router
-from .api.smart_routes import router as smart_router
+from app.core.config import settings
+from app.api.routes import router as main_router
+from app.api.auth_routes import router as auth_router
+from app.api.smart_routes import router as smart_router
 
 # Create FastAPI app
 app = FastAPI(
@@ -128,3 +128,15 @@ async def startup_event():
 async def shutdown_event():
     """Shutdown event handler"""
     print("\n👋 Shutting down Smart Cane GPS Tracker...")
+
+
+if __name__ == '__main__':
+    import uvicorn
+
+    uvicorn.run(
+        "app.main:app",
+        host=settings.HOST,
+        port=settings.PORT,
+        reload=settings.DEBUG,
+        log_level="info"
+    )

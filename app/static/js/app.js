@@ -22,20 +22,19 @@ const AppState = {
     routePlaybackInterval: null
 };
 
-// DOM Elements Cache
+// DOM Elements Cache - with null safety
 const DOM = {
-    statusIndicator: document.getElementById('status-indicator'),
-    statusText: document.getElementById('status-text'),
-    syncStatus: document.getElementById('sync-status'),
-    syncAnimation: document.getElementById('sync-animation'),
-    progressBar: document.getElementById('data-progress-bar'),
-    latValue: document.getElementById('latitude-value'),
-    lonValue: document.getElementById('longitude-value'),
-    timeValue: document.getElementById('time-value'),
-    trackButton: document.getElementById('track-button'),
-    activityLog: document.getElementById('activity-log'),
-    userDisplay: document.getElementById('user-display'),
-    logoutBtn: document.getElementById('logout-btn')
+    get statusIndicator() { return document.getElementById('status-indicator'); },
+    get statusText() { return document.getElementById('status-text'); },
+    get syncStatus() { return document.getElementById('sync-status'); },
+    get syncIcon() { return document.getElementById('sync-icon'); },
+    get progressBar() { return document.getElementById('data-progress-bar'); },
+    get latValue() { return document.getElementById('latitude-value'); },
+    get lonValue() { return document.getElementById('longitude-value'); },
+    get timeValue() { return document.getElementById('time-value'); },
+    get activityLog() { return document.getElementById('activity-log'); },
+    get userDisplay() { return document.getElementById('user-display'); },
+    get logoutBtn() { return document.getElementById('logout-btn'); }
 };
 
 /**
@@ -115,10 +114,12 @@ function initI18n() {
  * Update UI translations dynamically
  */
 function updateUITranslations() {
+    if (typeof i18n === 'undefined') return;
+
     // Refresh any dynamic content that needs translation
-    if (DOM.statusText) {
+    if (DOM.statusText && DOM.statusIndicator) {
         // Update status based on current state
-        const isOnline = DOM.statusIndicator && DOM.statusIndicator.classList.contains('online');
+        const isOnline = DOM.statusIndicator.classList.contains('online');
         if (isOnline) {
             DOM.statusText.textContent = i18n.t('device.status.online');
         } else {
@@ -149,11 +150,24 @@ function initApp() {
  */
 function initMap() {
     try {
-        // Create map instance
+        // Detect if mobile device
+        const isMobile = window.innerWidth <= 768;
+
+        // Create map instance with mobile-optimized settings
         AppState.map = L.map('map', {
             center: AppState.initialPosition,
-            zoom: 13,
-            zoomControl: false
+            zoom: isMobile ? 12 : 13,
+            zoomControl: false,
+            // Mobile-specific touch settings
+            tap: true,
+            tapTolerance: 15,
+            touchZoom: true,
+            scrollWheelZoom: !isMobile, // Disable scroll zoom on mobile to prevent accidental zooming
+            doubleClickZoom: true,
+            dragging: true,
+            zoomAnimation: true,
+            fadeAnimation: true,
+            markerZoomAnimation: true
         });
 
         // Add tile layers
@@ -184,6 +198,11 @@ function initMap() {
 
         // Fetch initial location
         fetchLocationData();
+
+        // Add mobile-specific event listeners
+        if (isMobile) {
+            setupMobileMapControls();
+        }
 
         logActivity('Map initialized successfully', 'success');
     } catch (error) {
@@ -251,7 +270,7 @@ async function fetchLocationData(useRealTime = false) {
             throw new Error('Invalid data received from server');
         }
     } catch (error) {
-        console.error('? Fetch error:', error);
+        console.error('❌ Fetch error:', error);
         showErrorUI(error.message);
         logActivity(`Error: ${error.message}`, 'error');
     } finally {
@@ -283,20 +302,20 @@ function updateUI(data, isRealTime = false) {
             timeZone: 'Asia/Ho_Chi_Minh'
         }).format(timestamp);
 
-        // Update text values
-        DOM.latValue.textContent = latitude.toFixed(6);
-        DOM.lonValue.textContent = longitude.toFixed(6);
-        DOM.timeValue.textContent = dateTimeString;
+        // Update text values with null checks
+        if (DOM.latValue) DOM.latValue.textContent = latitude.toFixed(6);
+        if (DOM.lonValue) DOM.lonValue.textContent = longitude.toFixed(6);
+        if (DOM.timeValue) DOM.timeValue.textContent = dateTimeString;
 
         // Update status
-        DOM.statusIndicator.className = 'status-dot online';
+        if (DOM.statusIndicator) DOM.statusIndicator.className = 'status-dot online';
 
         if (isRealTime) {
-            DOM.statusText.textContent = 'Real-time GPS';
-            DOM.syncStatus.innerHTML = '<i class="fas fa-signal"></i> Live Data';
+            if (DOM.statusText) DOM.statusText.textContent = typeof i18n !== 'undefined' ? i18n.t('device.status.realtime') : 'Real-time GPS';
+            if (DOM.syncStatus) DOM.syncStatus.innerHTML = '<i class="fas fa-signal"></i> ' + (typeof i18n !== 'undefined' ? i18n.t('sync.live') : 'Live Data');
         } else {
-            DOM.statusText.textContent = 'Online';
-            DOM.syncStatus.innerHTML = '<i class="fas fa-sync-alt"></i> Auto Sync';
+            if (DOM.statusText) DOM.statusText.textContent = typeof i18n !== 'undefined' ? i18n.t('device.status.online') : 'Online';
+            if (DOM.syncStatus) DOM.syncStatus.innerHTML = '<i class="fas fa-sync-alt"></i> ' + (typeof i18n !== 'undefined' ? i18n.t('sync.auto') : 'Auto Sync');
         }
 
         // Update marker
@@ -308,7 +327,7 @@ function updateUI(data, isRealTime = false) {
             isRealTime
         });
 
-        console.log(`? UI updated: ${latitude.toFixed(6)}, ${longitude.toFixed(6)}`);
+        console.log(`✅ UI updated: ${latitude.toFixed(6)}, ${longitude.toFixed(6)}`);
     } catch (error) {
         console.error('Error updating UI:', error);
         showErrorUI(error.message);
@@ -323,8 +342,10 @@ function updateMarker(position, info) {
 
     // Create custom marker icon
     const markerIcon = isRealTime ? 'fa-circle' : 'fa-map-marker-alt';
+    const popupIcon = isRealTime ? '<i class="fas fa-broadcast-tower"></i>' : '<i class="fas fa-map-marker-alt"></i>';
+
     const customIcon = L.divIcon({
-        html: `<div class="custom-marker" style="font-size: 28px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));">${markerIcon}</div>`,
+        html: `<div class="custom-marker"><i class="fas ${markerIcon}" style="color: #3b82f6; font-size: 28px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));"></i></div>`,
         className: '',
         iconSize: [32, 32],
         iconAnchor: [16, 32],
@@ -368,12 +389,12 @@ function updateMarker(position, info) {
  * Show error state in UI
  */
 function showErrorUI(message) {
-    DOM.latValue.textContent = 'N/A';
-    DOM.lonValue.textContent = 'N/A';
-    DOM.timeValue.textContent = 'N/A';
-    DOM.statusIndicator.className = 'status-dot error';
-    DOM.statusText.textContent = 'Error';
-    DOM.syncStatus.textContent = '? Sync Error';
+    if (DOM.latValue) DOM.latValue.textContent = 'N/A';
+    if (DOM.lonValue) DOM.lonValue.textContent = 'N/A';
+    if (DOM.timeValue) DOM.timeValue.textContent = 'N/A';
+    if (DOM.statusIndicator) DOM.statusIndicator.className = 'status-dot error';
+    if (DOM.statusText) DOM.statusText.textContent = 'Error';
+    if (DOM.syncStatus) DOM.syncStatus.textContent = '❌ Sync Error';
     setProgressBar(0);
     console.error('Error:', message);
 }
@@ -382,16 +403,13 @@ function showErrorUI(message) {
  * Manual fetch location (button click)
  */
 async function fetchLocationDataManual() {
-    const originalText = DOM.trackButton.querySelector('.btn-text').textContent;
-    DOM.trackButton.querySelector('.btn-text').textContent = 'Fetching GPS...';
-    DOM.trackButton.disabled = true;
     setProgressBar(10);
 
     try {
         await fetchLocationData(true); // Use real-time GPS
     } finally {
-        DOM.trackButton.querySelector('.btn-text').textContent = originalText;
-        DOM.trackButton.disabled = false;
+        setProgressBar(100);
+        setTimeout(() => setProgressBar(0), 500);
     }
 }
 
@@ -408,12 +426,12 @@ function setProgressBar(percentage) {
  * Update sync status animation
  */
 function updateSyncStatus(syncing) {
-    if (DOM.syncAnimation) {
+    if (DOM.syncIcon) {
         if (syncing) {
-            DOM.syncAnimation.classList.add('active');
+            DOM.syncIcon.style.animation = 'rotate 1s linear infinite';
         } else {
             setTimeout(() => {
-                DOM.syncAnimation.classList.remove('active');
+                DOM.syncIcon.style.animation = '';
             }, 500);
         }
     }
@@ -434,7 +452,7 @@ function startAutoRefresh() {
     }, AppState.refreshRate);
 
     logActivity(`Auto-refresh started (${AppState.refreshRate / 1000}s interval)`, 'info');
-    console.log(`? Auto-refresh set to ${AppState.refreshRate / 1000} seconds`);
+    console.log(`⏰ Auto-refresh set to ${AppState.refreshRate / 1000} seconds`);
 }
 
 /**
@@ -599,6 +617,66 @@ async function checkGeofences(latitude, longitude) {
     } catch (error) {
         console.error('Error checking geofences:', error);
     }
+}
+
+/**
+ * Setup mobile-specific map controls
+ */
+function setupMobileMapControls() {
+    console.log('📱 Setting up mobile map controls');
+
+    // Disable map dragging when interacting with device info panel on mobile
+    const devicePanel = document.querySelector('.device-status-panel');
+    if (devicePanel) {
+        devicePanel.addEventListener('touchstart', () => {
+            AppState.map.dragging.disable();
+        });
+
+        devicePanel.addEventListener('touchend', () => {
+            setTimeout(() => {
+                AppState.map.dragging.enable();
+            }, 100);
+        });
+    }
+
+    // Add double-tap to recenter on mobile
+    let lastTap = 0;
+    const mapContainer = document.getElementById('map');
+    if (mapContainer) {
+        mapContainer.addEventListener('touchend', (e) => {
+            const currentTime = new Date().getTime();
+            const tapLength = currentTime - lastTap;
+
+            if (tapLength < 300 && tapLength > 0) {
+                // Double tap detected
+                centerMap();
+                e.preventDefault();
+            }
+            lastTap = currentTime;
+        });
+    }
+
+    // Handle orientation change
+    window.addEventListener('orientationchange', () => {
+        setTimeout(() => {
+            AppState.map.invalidateSize();
+            if (AppState.marker) {
+                const position = AppState.marker.getLatLng();
+                AppState.map.setView(position, AppState.map.getZoom());
+            }
+        }, 200);
+    });
+
+    // Handle window resize for responsive map
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+            AppState.map.invalidateSize();
+        }, 250);
+    });
+
+    logActivity('Mobile map controls enabled', 'info');
 }
 
 /**

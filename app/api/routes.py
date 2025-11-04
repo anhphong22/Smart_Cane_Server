@@ -6,9 +6,9 @@ from fastapi.responses import JSONResponse
 from typing import Optional
 import datetime
 import pytz
-from .models import LocationRequest, LocationResponse, StatusResponse, ErrorResponse
-from ..services.location_service import location_service
-from ..core.config import settings
+from .models import LocationRequest, LocationResponse, StatusResponse
+from app.core.config import settings
+from app.services.location_service import location_service
 
 router = APIRouter()
 
@@ -28,7 +28,7 @@ async def save_location(location: LocationRequest):
             longitude=location.longitude,
             device_id=location.deviceId
         )
-        
+
         if success:
             return StatusResponse(
                 status="success",
@@ -58,7 +58,7 @@ async def save_location_get(
             longitude=longitude,
             device_id=deviceId
         )
-        
+
         if success:
             return StatusResponse(
                 status="success",
@@ -84,16 +84,16 @@ async def esp32_save_location(location: LocationRequest, request: Request):
             longitude=location.longitude,
             device_id=location.deviceId
         )
-        
+
         if success:
             current_time = datetime.datetime.now(pytz.timezone(settings.SERVER_TIMEZONE))
             time_str = current_time.strftime('%H:%M:%S')
-            
+
             print(f"?? [{time_str}] ESP32 REAL DATA: Device={location.deviceId}, "
                   f"Lat={location.latitude:.6f}, Lon={location.longitude:.6f}")
             print(f"   ?? Source: ESP32 Hardware GPS")
             print(f"   ?? IP: {request.client.host}")
-            
+
             return StatusResponse(
                 status="success",
                 message="ESP32 location saved",
@@ -123,16 +123,16 @@ async def esp32_save_location_get(
             longitude=longitude,
             device_id=deviceId
         )
-        
+
         if success:
             current_time = datetime.datetime.now(pytz.timezone(settings.SERVER_TIMEZONE))
             time_str = current_time.strftime('%H:%M:%S')
-            
+
             print(f"?? [{time_str}] ESP32 REAL DATA: Device={deviceId}, "
                   f"Lat={latitude:.6f}, Lon={longitude:.6f}")
             print(f"   ?? Source: ESP32 Hardware GPS")
             print(f"   ?? IP: {request.client.host if request else 'unknown'}")
-            
+
             return StatusResponse(
                 status="success",
                 message="ESP32 location saved",
@@ -159,7 +159,7 @@ async def get_latest_location(
             device_id=deviceId,
             force_real_time=forceRealTime
         )
-        
+
         if data:
             return LocationResponse(**data)
         else:
@@ -178,9 +178,9 @@ async def get_real_gps(
     """
     try:
         print(f"?? API /api/get_real_gps: Querying for device_id: {deviceId}")
-        
+
         data = location_service.get_real_gps(device_id=deviceId)
-        
+
         if data:
             print(f"? Real-time GPS from DB: Lat={data['latitude']}, Lon={data['longitude']}")
             return LocationResponse(**data)

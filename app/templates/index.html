@@ -12,9 +12,9 @@
     <!-- Google Fonts - Optimized Loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@600;700&family=Noto+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
     <noscript>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@600;700&family=Noto+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     </noscript>
     
     <!-- Font Awesome -->
@@ -32,32 +32,41 @@
     <aside class="sidebar-nav">
         <div class="sidebar-header">
             <div class="logo">
-                <i class="fas fa-walking"></i>
-                <span class="logo-text" data-i18n="app.title">Gậy Thông Minh</span>
+                <div class="logo-icon">
+                    <i class="fas fa-walking"></i>
+                </div>
+                <div class="logo-content">
+                    <span class="logo-text" data-i18n="app.title">Gậy Thông Minh</span>
+                    <span class="logo-subtitle">GPS Tracker</span>
+                </div>
             </div>
         </div>
 
         <nav class="sidebar-menu">
-            <a href="#overview" class="menu-item active" data-section="overview">
-                <i class="fas fa-th-large"></i>
-                <span data-i18n="dashboard.overview">Tổng Quan</span>
-            </a>
-            <a href="#map" class="menu-item" data-section="map">
-                <i class="fas fa-map-marked-alt"></i>
-                <span data-i18n="dashboard.map">Bản Đồ</span>
-            </a>
-            <a href="#device" class="menu-item" data-section="device">
-                <i class="fas fa-mobile-alt"></i>
-                <span data-i18n="dashboard.device">Thiết Bị</span>
-            </a>
-            <a href="#analytics" class="menu-item" data-section="analytics">
-                <i class="fas fa-chart-bar"></i>
-                <span data-i18n="dashboard.analytics">Phân Tích</span>
-            </a>
+            <div class="menu-section">
+                <div class="menu-section-title" data-i18n="menu.main">Main Menu</div>
+                <a href="#overview" class="menu-item active" data-section="overview">
+                    <i class="fas fa-th-large"></i>
+                    <span data-i18n="dashboard.overview">Tổng Quan</span>
+                    <span class="menu-badge">4</span>
+                </a>
+                <a href="#map" class="menu-item" data-section="map">
+                    <i class="fas fa-map-marked-alt"></i>
+                    <span data-i18n="dashboard.map">Bản Đồ</span>
+                </a>
+                <a href="#device" class="menu-item" data-section="device">
+                    <i class="fas fa-mobile-alt"></i>
+                    <span data-i18n="dashboard.device">Thiết Bị</span>
+                </a>
+                <a href="#analytics" class="menu-item" data-section="analytics">
+                    <i class="fas fa-chart-bar"></i>
+                    <span data-i18n="dashboard.analytics">Phân Tích</span>
+                </a>
+            </div>
         </nav>
 
         <div class="sidebar-footer">
-            <div class="user-profile">
+            <div class="user-profile" onclick="toggleUserMenu()">
                 <div class="user-avatar">
                     <i class="fas fa-user"></i>
                 </div>
@@ -65,6 +74,23 @@
                     <div id="user-display" class="user-name">User</div>
                     <div class="user-role">Admin</div>
                 </div>
+                <i class="fas fa-chevron-down user-menu-icon"></i>
+            </div>
+
+            <div class="user-dropdown-menu" id="userDropdownMenu">
+                <a href="#profile" class="user-menu-item">
+                    <i class="fas fa-user-circle"></i>
+                    <span data-i18n="menu.profile">Profile</span>
+                </a>
+                <a href="#preferences" class="user-menu-item">
+                    <i class="fas fa-sliders-h"></i>
+                    <span data-i18n="menu.preferences">Preferences</span>
+                </a>
+                <div class="user-menu-divider"></div>
+                <a href="#" class="user-menu-item logout" onclick="logout(); return false;">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span data-i18n="menu.logout">Logout</span>
+                </a>
             </div>
         </div>
     </aside>
@@ -86,15 +112,16 @@
                 <!-- Language Switcher -->
                 <div class="language-dropdown">
                     <button class="icon-btn" onclick="toggleLanguageMenu()">
-                        <i class="fas fa-globe"></i>
-                        <span id="current-lang">VI</span>
+                        <span id="current-flag" style="font-size: 1.25rem;">🇻🇳</span>
                     </button>
                     <div class="dropdown-menu language-menu" id="language-menu">
                         <button class="dropdown-item" onclick="changeLanguage('vi')">
-                            🇻🇳 Tiếng Việt
+                            <span style="font-size: 1.25rem; margin-right: 0.5rem;">🇻🇳</span>
+                            <span>Tiếng Việt</span>
                         </button>
                         <button class="dropdown-item" onclick="changeLanguage('en')">
-                            🇬🇧 English
+                            <span style="font-size: 1.25rem; margin-right: 0.5rem;">🇬🇧</span>
+                            <span>English</span>
                         </button>
                     </div>
                 </div>
@@ -121,183 +148,229 @@
         <main class="content-area">
             <!-- Section: Overview -->
             <section class="content-section active" id="section-overview">
-                <!-- Quick Stats -->
-                <div class="quick-stats">
-                    <div class="stat-card gradient-blue">
-                        <div class="stat-icon">
-                            <i class="fas fa-map-marker-alt"></i>
-                        </div>
-                        <div class="stat-content">
-                            <div class="stat-label" data-i18n="stats.locations_today">Vị Trí Hôm Nay</div>
-                            <div class="stat-value" id="stat-locations">0</div>
-                        </div>
-                    </div>
-
-                    <div class="stat-card gradient-green">
-                        <div class="stat-icon">
-                            <i class="fas fa-route"></i>
-                        </div>
-                        <div class="stat-content">
-                            <div class="stat-label" data-i18n="stats.distance_today">Quãng Đường</div>
-                            <div class="stat-value" id="stat-distance">0 km</div>
-                        </div>
-                    </div>
-
-                    <div class="stat-card gradient-orange">
-                        <div class="stat-icon">
-                            <i class="fas fa-clock"></i>
-                        </div>
-                        <div class="stat-content">
-                            <div class="stat-label" data-i18n="stats.active_time">Thời Gian Hoạt Động</div>
-                            <div class="stat-value" id="stat-active-time">0h</div>
-                        </div>
-                    </div>
-
-                    <div class="stat-card gradient-red">
-                        <div class="stat-icon">
-                            <i class="fas fa-exclamation-triangle"></i>
-                        </div>
-                        <div class="stat-content">
-                            <div class="stat-label" data-i18n="stats.alerts_today">Cảnh Báo</div>
-                            <div class="stat-value" id="stat-alerts">0</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Main Grid -->
-                <div class="dashboard-grid">
-                    <!-- Live Map Panel -->
-                    <div class="panel map-panel-large">
-                        <div class="panel-header">
-                            <h3 class="panel-title">
-                                <i class="fas fa-map"></i>
-                                <span data-i18n="map.title">Bản Đồ Vị Trí Trực Tiếp</span>
-                            </h3>
-                            <div class="panel-actions">
-                                <button class="btn-icon-panel" onclick="centerMap()" data-i18n-title="button.center_map">
-                                    <i class="fas fa-crosshairs"></i>
-                                </button>
-                                <button class="btn-icon-panel" onclick="toggleFullscreen()" data-i18n-title="button.fullscreen">
-                                    <i class="fas fa-expand"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div id="map" class="map-container"></div>
-                        
-                        <!-- Map Overlay Controls -->
-                        <div class="map-overlay-controls">
-                            <button class="map-control-btn primary" onclick="fetchLocationDataManual()">
-                                <i class="fas fa-location-arrow"></i>
-                                <span data-i18n="button.get_gps">Lấy GPS</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Device Status Panel -->
-                    <div class="panel device-status-panel">
-                        <div class="panel-header">
-                            <h3 class="panel-title">
-                                <i class="fas fa-mobile-alt"></i>
-                                <span data-i18n="device.status">Trạng Thái Thiết Bị</span>
-                            </h3>
-                            <div class="status-indicator-wrapper">
-                                <span id="status-indicator" class="status-dot"></span>
-                                <span id="status-text" class="status-label" data-i18n="device.status.offline">Ngoại tuyến</span>
-                            </div>
-                        </div>
-
-                        <div class="device-info-grid">
-                            <div class="info-item">
-                                <div class="info-icon">
-                                    <i class="fas fa-id-card"></i>
+                <div class="dashboard-grid main-content-grid">
+                    <div class="content-column primary-column">
+                        <!-- Quick Stats -->
+                        <div class="quick-stats">
+                            <div class="stat-card gradient-blue">
+                                <div class="stat-icon">
+                                    <i class="fas fa-map-marker-alt"></i>
                                 </div>
-                                <div class="info-content">
-                                    <div class="info-label" data-i18n="device.id">ID Thiết Bị</div>
-                                    <div class="info-value" id="deviceId">{{ device_id }}</div>
+                                <div class="stat-content">
+                                    <div class="stat-label" data-i18n="stats.locations_today">Vị Trí Hôm Nay</div>
+                                    <div class="stat-value" id="stat-locations">0</div>
                                 </div>
                             </div>
 
-                            <div class="info-item">
-                                <div class="info-icon">
-                                    <i class="fas fa-map-pin"></i>
+                            <div class="stat-card gradient-green">
+                                <div class="stat-icon">
+                                    <i class="fas fa-route"></i>
                                 </div>
-                                <div class="info-content">
-                                    <div class="info-label" data-i18n="gps.latitude">Vĩ Độ</div>
-                                    <div class="info-value" id="latitude-value">--</div>
-                                </div>
-                            </div>
-
-                            <div class="info-item">
-                                <div class="info-icon">
-                                    <i class="fas fa-globe"></i>
-                                </div>
-                                <div class="info-content">
-                                    <div class="info-label" data-i18n="gps.longitude">Kinh Độ</div>
-                                    <div class="info-value" id="longitude-value">--</div>
+                                <div class="stat-content">
+                                    <div class="stat-label" data-i18n="stats.distance_today">Quãng Đường</div>
+                                    <div class="stat-value" id="stat-distance">0 km</div>
                                 </div>
                             </div>
 
-                            <div class="info-item">
-                                <div class="info-icon">
+                            <div class="stat-card gradient-orange">
+                                <div class="stat-icon">
                                     <i class="fas fa-clock"></i>
                                 </div>
-                                <div class="info-content">
-                                    <div class="info-label" data-i18n="gps.last_update">Cập Nhật Lần Cuối</div>
-                                    <div class="info-value" id="time-value">--:--:--</div>
+                                <div class="stat-content">
+                                    <div class="stat-label" data-i18n="stats.active_time">Thời Gian Hoạt Động</div>
+                                    <div class="stat-value" id="stat-active-time">0h</div>
+                                </div>
+                            </div>
+
+                            <div class="stat-card gradient-red">
+                                <div class="stat-icon">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                </div>
+                                <div class="stat-content">
+                                    <div class="stat-label" data-i18n="stats.alerts_today">Cảnh Báo</div>
+                                    <div class="stat-value" id="stat-alerts">0</div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Sync Status -->
-                        <div class="sync-status-bar">
-                            <div class="sync-info">
-                                <i class="fas fa-sync-alt" id="sync-icon"></i>
-                                <span id="sync-status" data-i18n="sync.auto">Tự Động Đồng Bộ</span>
+                        <!-- Live Map Panel -->
+                        <div class="panel map-panel-large">
+                            <div class="panel-header">
+                                <h3 class="panel-title">
+                                    <i class="fas fa-map"></i>
+                                    <span data-i18n="map.title">Bản Đồ Vị Trí Trực Tiếp</span>
+                                </h3>
+                                <div class="panel-actions">
+                                    <button class="btn-icon-panel" onclick="centerMap()" data-i18n-title="button.center_map">
+                                        <i class="fas fa-crosshairs"></i>
+                                    </button>
+                                    <button class="btn-icon-panel" onclick="toggleFullscreen()" data-i18n-title="button.fullscreen">
+                                        <i class="fas fa-expand"></i>
+                                    </button>
+                                </div>
                             </div>
-                            <div class="progress-bar">
-                                <div id="data-progress-bar" class="progress-fill"></div>
+                            <div class="panel-body map-panel-body">
+                                <div id="map" class="map-container"></div>
+
+                                <!-- Map Overlay Controls -->
+                                <div class="map-overlay-controls">
+                                    <button class="map-control-btn primary" onclick="fetchLocationDataManual()">
+                                        <i class="fas fa-location-arrow"></i>
+                                        <span data-i18n="button.get_gps">Lấy GPS</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Route History -->
+                        <div class="panel route-history-panel">
+                            <div class="panel-header">
+                                <h3 class="panel-title">
+                                    <i class="fas fa-route"></i>
+                                    <span data-i18n="route.title">Lịch Sử Tuyến Đường</span>
+                                </h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="route-controls">
+                                    <select id="route-hours" class="form-select-modern">
+                                        <option value="1" data-i18n="route.last_hour">Giờ Qua</option>
+                                        <option value="6" data-i18n="route.last_6hours">6 Giờ Qua</option>
+                                        <option value="24" selected data-i18n="route.last_24hours">24 Giờ Qua</option>
+                                        <option value="168" data-i18n="route.last_week">Tuần Qua</option>
+                                    </select>
+                                    <button class="btn-modern secondary" onclick="showRouteHistory()">
+                                        <i class="fas fa-play"></i>
+                                        <span data-i18n="button.show_route">Hiển Thị</span>
+                                    </button>
+                                </div>
+                                <div id="route-analytics" class="route-analytics-content"></div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Secondary Grid -->
-                <div class="secondary-grid">
-                    <!-- Activity Log -->
-                    <div class="panel activity-log-panel">
-                        <div class="panel-header">
-                            <h3 class="panel-title">
-                                <i class="fas fa-list"></i>
-                                <span data-i18n="activity.title">Nhật Ký Hoạt Động</span>
-                            </h3>
-                            <button class="btn-icon-panel" onclick="clearActivityLog()" data-i18n-title="activity.clear">
-                                <i class="fas fa-trash-alt"></i>
-                            </button>
-                        </div>
-                        <div id="activity-log" class="activity-log-content"></div>
-                    </div>
+                    <div class="content-column secondary-column">
+                        <!-- Device Status Panel -->
+                        <div class="panel device-status-panel">
+                            <div class="panel-header">
+                                <h3 class="panel-title">
+                                    <i class="fas fa-mobile-alt"></i>
+                                    <span data-i18n="device.status">Trạng Thái Thiết Bị</span>
+                                </h3>
+                                <div class="status-indicator-wrapper">
+                                    <span id="status-indicator" class="status-dot"></span>
+                                    <span id="status-text" class="status-label" data-i18n="device.status.offline">Ngoại tuyến</span>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <div class="device-info-grid">
+                                    <div class="info-item">
+                                        <div class="info-icon">
+                                            <i class="fas fa-id-card"></i>
+                                        </div>
+                                        <div class="info-content">
+                                            <div class="info-label" data-i18n="device.id">ID Thiết Bị</div>
+                                            <div class="info-value" id="deviceId">{{ device_id }}</div>
+                                        </div>
+                                    </div>
 
-                    <!-- Route History -->
-                    <div class="panel route-history-panel">
-                        <div class="panel-header">
-                            <h3 class="panel-title">
-                                <i class="fas fa-route"></i>
-                                <span data-i18n="route.title">Lịch Sử Tuyến Đường</span>
-                            </h3>
+                                    <div class="info-item">
+                                        <div class="info-icon">
+                                            <i class="fas fa-map-pin"></i>
+                                        </div>
+                                        <div class="info-content">
+                                            <div class="info-label" data-i18n="gps.latitude">Vĩ Độ</div>
+                                            <div class="info-value" id="latitude-value">--</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="info-item">
+                                        <div class="info-icon">
+                                            <i class="fas fa-globe"></i>
+                                        </div>
+                                        <div class="info-content">
+                                            <div class="info-label" data-i18n="gps.longitude">Kinh Độ</div>
+                                            <div class="info-value" id="longitude-value">--</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="info-item">
+                                        <div class="info-icon">
+                                            <i class="fas fa-clock"></i>
+                                        </div>
+                                        <div class="info-content">
+                                            <div class="info-label" data-i18n="gps.last_update">Cập Nhật Lần Cuối</div>
+                                            <div class="info-value" id="time-value">--:--:--</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Sync Status -->
+                                <div class="sync-status-bar">
+                                    <div class="sync-info">
+                                        <i class="fas fa-sync-alt" id="sync-icon"></i>
+                                        <span id="sync-status" data-i18n="sync.auto">Tự Động Đồng Bộ</span>
+                                    </div>
+                                    <div class="progress-bar">
+                                        <div id="data-progress-bar" class="progress-fill"></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="route-controls">
-                            <select id="route-hours" class="form-select-modern">
-                                <option value="1" data-i18n="route.last_hour">Giờ Qua</option>
-                                <option value="6" data-i18n="route.last_6hours">6 Giờ Qua</option>
-                                <option value="24" selected data-i18n="route.last_24hours">24 Giờ Qua</option>
-                                <option value="168" data-i18n="route.last_week">Tuần Qua</option>
-                            </select>
-                            <button class="btn-modern secondary" onclick="showRouteHistory()">
-                                <i class="fas fa-play"></i>
-                                <span data-i18n="button.show_route">Hiển Thị</span>
-                            </button>
+
+                        <!-- Analytics Snapshot -->
+                        <div class="panel analytics-overview-panel">
+                            <div class="panel-header">
+                                <h3 class="panel-title">
+                                    <i class="fas fa-chart-line"></i>
+                                    <span data-i18n="analytics.title">Phân Tích</span>
+                                </h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="analytics-grid">
+                                    <div class="analytics-item">
+                                        <span class="analytics-label" data-i18n="analytics.total_distance">Tổng Quãng Đường</span>
+                                        <span class="analytics-value">
+                                            <span id="analytics-total-distance">0</span>
+                                            <span class="analytics-unit" data-i18n="unit.km">km</span>
+                                        </span>
+                                    </div>
+                                    <div class="analytics-item">
+                                        <span class="analytics-label" data-i18n="analytics.total_time">Tổng Thời Gian</span>
+                                        <span class="analytics-value">
+                                            <span id="analytics-total-time">0</span>
+                                            <span class="analytics-unit" data-i18n="unit.hour">giờ</span>
+                                        </span>
+                                    </div>
+                                    <div class="analytics-item">
+                                        <span class="analytics-label" data-i18n="analytics.avg_speed">Tốc độ Trung Bình</span>
+                                        <span class="analytics-value">
+                                            <span id="analytics-average-speed">0</span>
+                                            <span class="analytics-unit" data-i18n="unit.kmh">km/h</span>
+                                        </span>
+                                    </div>
+                                    <div class="analytics-item">
+                                        <span class="analytics-label" data-i18n="analytics.trips">Chuyến đi</span>
+                                        <span class="analytics-value" id="analytics-total-trips">0</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div id="route-analytics" class="route-analytics-content"></div>
+
+                        <!-- Activity Log -->
+                        <div class="panel activity-log-panel">
+                            <div class="panel-header">
+                                <h3 class="panel-title">
+                                    <i class="fas fa-list"></i>
+                                    <span data-i18n="activity.title">Nhật Ký Hoạt Động</span>
+                                </h3>
+                                <button class="btn-icon-panel" onclick="clearActivityLog()" data-i18n-title="activity.clear">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </div>
+                            <div class="panel-body">
+                                <div id="activity-log" class="activity-log-content"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -372,7 +445,7 @@
                             <div class="empty-state-icon">
                                 <i class="fas fa-chart-bar"></i>
                             </div>
-                            <h3 class="empty-state-title" data-i18n="empty.analytics.title">Chưa Có D? Li?u Phân Tích</h3>
+                            <h3 class="empty-state-title" data-i18n="empty.analytics.title">Chưa Có Dữ Liệu Phân Tích</h3>
                             <p class="empty-state-description" data-i18n="empty.analytics.description">
                                 Dữ liệu phân tích sẽ xuất hiện khi thiết bị bắt đầu gửi thông tin vị trí. Hãy kiểm tra lại sau.
                             </p>
@@ -406,11 +479,17 @@
     <script src="/static/js/app.js"></script>
     
     <script>
+        // Language flags
+        const languageFlags = {
+            'vi': '🇻🇳',
+            'en': '🇬🇧'
+        };
+
         // Initialize language on page load
         document.addEventListener('DOMContentLoaded', function() {
             const savedLang = i18n.getLanguage();
             document.documentElement.lang = savedLang;
-            document.getElementById('current-lang').textContent = savedLang.toUpperCase();
+            document.getElementById('current-flag').textContent = languageFlags[savedLang];
             i18n.updatePageTranslations();
             
             // Update select options
@@ -432,7 +511,7 @@
         function changeLanguage(lang) {
             i18n.setLanguage(lang);
             document.documentElement.lang = lang;
-            document.getElementById('current-lang').textContent = lang.toUpperCase();
+            document.getElementById('current-flag').textContent = languageFlags[lang];
             toggleLanguageMenu();
             updateSelectTranslations();
         }
@@ -483,6 +562,18 @@
             // Placeholder for notifications
             alert(i18n.t('message.info') + ': No new notifications');
         }
+
+        // Toggle user menu
+        function toggleUserMenu() {
+            document.getElementById('userDropdownMenu').classList.toggle('show');
+        }
+
+        // Close user menu when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.user-profile')) {
+                document.getElementById('userDropdownMenu').classList.remove('show');
+            }
+        });
     </script>
 </body>
 </html>
