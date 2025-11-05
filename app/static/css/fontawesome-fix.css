@@ -1,0 +1,74 @@
+/* Font Awesome Icon Styling Enhancements */
+
+/* Ensure Font Awesome icons are displayed properly */
+.fas, .far, .fab, .fa {
+    font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands" !important;
+    font-weight: 900;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Logo icon styling */
+.logo-icon i {
+    font-size: 2rem;
+}
+
+/* User icon in header */
+.user-icon i {
+    font-size: 1rem;
+}
+
+/* Device and stat icons */
+.device-icon i,
+.stat-icon i {
+    display: block;
+}
+
+/* Map marker custom styling */
+.custom-marker {
+    text-align: center;
+    line-height: 1;
+}
+
+/* Popup icons */
+.popup-content i {
+    margin-right: 0.5rem;
+    color: var(--color-primary);
+}
+
+.popup-title i {
+    margin-right: 0.5rem;
+}
+
+/* Sync status icon */
+#sync-status i {
+    margin-right: 0.5rem;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Stop spinning when not syncing */
+.sync-status:not(.syncing) #sync-status i {
+    animation: none;
+}
+
+/* Activity log icons */
+.activity-item i {
+    width: 16px;
+    text-align: center;
+}
+
+/* Button icons */
+.btn-icon,
+.btn i {
+    margin-right: 0.5rem;
+}
+
+/* Panel title icons */
+.panel-title-small i {
+    margin-right: 0.5rem;
+}
