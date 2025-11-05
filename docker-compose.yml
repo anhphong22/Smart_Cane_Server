@@ -1,0 +1,19 @@
+services:
+  smart-cane-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: >
+      uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8080}
+    ports:
+      - "${PORT:-8080}:8080"
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: /app/data/database.db
+    volumes:
+      - smart_cane_data:/app/data
+    restart: unless-stopped
+
+volumes:
+  smart_cane_data:

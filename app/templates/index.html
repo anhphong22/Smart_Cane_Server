@@ -35,64 +35,31 @@
                 <div class="logo-icon">
                     <i class="fas fa-walking"></i>
                 </div>
-                <div class="logo-content">
-                    <span class="logo-text" data-i18n="app.title">Gậy Thông Minh</span>
-                    <span class="logo-subtitle">GPS Tracker</span>
-                </div>
+                <span class="logo-text" data-i18n="app.title">Gậy Thông Minh</span>
             </div>
+            <button class="sidebar-close" onclick="toggleSidebar()" aria-label="Close sidebar">
+                <i class="fas fa-times"></i>
+            </button>
         </div>
 
         <nav class="sidebar-menu">
-            <div class="menu-section">
-                <div class="menu-section-title" data-i18n="menu.main">Main Menu</div>
-                <a href="#overview" class="menu-item active" data-section="overview">
-                    <i class="fas fa-th-large"></i>
-                    <span data-i18n="dashboard.overview">Tổng Quan</span>
-                    <span class="menu-badge">4</span>
-                </a>
-                <a href="#map" class="menu-item" data-section="map">
-                    <i class="fas fa-map-marked-alt"></i>
-                    <span data-i18n="dashboard.map">Bản Đồ</span>
-                </a>
-                <a href="#device" class="menu-item" data-section="device">
-                    <i class="fas fa-mobile-alt"></i>
-                    <span data-i18n="dashboard.device">Thiết Bị</span>
-                </a>
-                <a href="#analytics" class="menu-item" data-section="analytics">
-                    <i class="fas fa-chart-bar"></i>
-                    <span data-i18n="dashboard.analytics">Phân Tích</span>
-                </a>
-            </div>
+            <a href="#overview" class="menu-item active" data-section="overview">
+                <i class="fas fa-th-large"></i>
+                <span data-i18n="dashboard.overview">Tổng Quan</span>
+            </a>
+            <a href="#device" class="menu-item" data-section="device">
+                <i class="fas fa-mobile-alt"></i>
+                <span data-i18n="dashboard.device">Thiết Bị</span>
+            </a>
+            <a href="#analytics" class="menu-item" data-section="analytics">
+                <i class="fas fa-chart-bar"></i>
+                <span data-i18n="dashboard.analytics">Phân Tích</span>
+            </a>
+            <a href="#" class="menu-item menu-item-logout" onclick="event.preventDefault(); logout();">
+                <i class="fas fa-sign-out-alt"></i>
+                <span data-i18n="user.logout">Đăng Xuất</span>
+            </a>
         </nav>
-
-        <div class="sidebar-footer">
-            <div class="user-profile" onclick="toggleUserMenu()">
-                <div class="user-avatar">
-                    <i class="fas fa-user"></i>
-                </div>
-                <div class="user-details">
-                    <div id="user-display" class="user-name">User</div>
-                    <div class="user-role">Admin</div>
-                </div>
-                <i class="fas fa-chevron-down user-menu-icon"></i>
-            </div>
-
-            <div class="user-dropdown-menu" id="userDropdownMenu">
-                <a href="#profile" class="user-menu-item">
-                    <i class="fas fa-user-circle"></i>
-                    <span data-i18n="menu.profile">Profile</span>
-                </a>
-                <a href="#preferences" class="user-menu-item">
-                    <i class="fas fa-sliders-h"></i>
-                    <span data-i18n="menu.preferences">Preferences</span>
-                </a>
-                <div class="user-menu-divider"></div>
-                <a href="#" class="user-menu-item logout" onclick="logout(); return false;">
-                    <i class="fas fa-sign-out-alt"></i>
-                    <span data-i18n="menu.logout">Logout</span>
-                </a>
-            </div>
-        </div>
     </aside>
 
     <!-- Main Content -->
@@ -100,47 +67,50 @@
         <!-- Top Header -->
         <header class="top-header">
             <div class="header-left">
-                <button class="menu-toggle" onclick="toggleSidebar()">
+                <button class="menu-toggle" onclick="toggleSidebar()" aria-label="Toggle menu">
                     <i class="fas fa-bars"></i>
                 </button>
-                <div class="breadcrumb">
-                    <span data-i18n="dashboard.overview">Tổng Quan</span>
-                </div>
+                <h1 class="page-title">
+                    <i class="title-icon fas fa-th-large" id="breadcrumb-icon"></i>
+                    <span class="title-text" data-i18n="dashboard.overview">Tổng Quan</span>
+                </h1>
             </div>
 
             <div class="header-right">
-                <!-- Language Switcher -->
-                <div class="language-dropdown">
-                    <button class="icon-btn" onclick="toggleLanguageMenu()">
-                        <span id="current-flag" style="font-size: 1.25rem;">🇻🇳</span>
+                <div class="header-actions">
+                    <!-- Quick GPS Button -->
+                    <button class="btn-quick-action" onclick="fetchLocationDataManual()" data-i18n-title="button.get_gps">
+                        <i class="fas fa-location-arrow"></i>
+                        <span class="btn-text" data-i18n="button.get_gps">Lấy GPS</span>
                     </button>
-                    <div class="dropdown-menu language-menu" id="language-menu">
-                        <button class="dropdown-item" onclick="changeLanguage('vi')">
-                            <span style="font-size: 1.25rem; margin-right: 0.5rem;">🇻🇳</span>
-                            <span>Tiếng Việt</span>
+                    
+                    <!-- Language Switcher -->
+                    <div class="language-dropdown">
+                        <button class="icon-btn" onclick="toggleLanguageMenu()" aria-label="Change language">
+                            <span id="current-flag" style="font-size: 1.25rem;">🇻🇳</span>
                         </button>
-                        <button class="dropdown-item" onclick="changeLanguage('en')">
-                            <span style="font-size: 1.25rem; margin-right: 0.5rem;">🇬🇧</span>
-                            <span>English</span>
-                        </button>
+                        <div class="dropdown-menu language-menu" id="language-menu">
+                            <button class="dropdown-item" onclick="changeLanguage('vi')">
+                                <span style="font-size: 1.25rem; margin-right: 0.5rem;">🇻🇳</span>
+                                <span>Tiếng Việt</span>
+                            </button>
+                            <button class="dropdown-item" onclick="changeLanguage('en')">
+                                <span style="font-size: 1.25rem; margin-right: 0.5rem;">🇬🇧</span>
+                                <span>English</span>
+                            </button>
+                        </div>
                     </div>
+
+                    <!-- Theme Toggle -->
+                    <button class="icon-btn" onclick="toggleTheme()" data-i18n-title="theme.toggle" aria-label="Toggle theme">
+                        <i class="fas fa-moon" id="theme-icon"></i>
+                    </button>
+
+                    <!-- Logout -->
+                    <button class="icon-btn" onclick="logout()" data-i18n-title="user.logout" aria-label="Logout">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
                 </div>
-
-                <!-- Theme Toggle -->
-                <button class="icon-btn" onclick="toggleTheme()" data-i18n-title="theme.toggle">
-                    <i class="fas fa-moon" id="theme-icon"></i>
-                </button>
-
-                <!-- Notifications -->
-                <button class="icon-btn" onclick="toggleNotifications()">
-                    <i class="fas fa-bell"></i>
-                    <span class="badge" id="notification-count">0</span>
-                </button>
-
-                <!-- Logout -->
-                <button class="icon-btn" onclick="logout()" data-i18n-title="user.logout">
-                    <i class="fas fa-sign-out-alt"></i>
-                </button>
             </div>
         </header>
 
@@ -148,57 +118,59 @@
         <main class="content-area">
             <!-- Section: Overview -->
             <section class="content-section active" id="section-overview">
-                <div class="dashboard-grid main-content-grid">
-                    <div class="content-column primary-column">
-                        <!-- Quick Stats -->
-                        <div class="quick-stats">
-                            <div class="stat-card gradient-blue">
-                                <div class="stat-icon">
-                                    <i class="fas fa-map-marker-alt"></i>
-                                </div>
-                                <div class="stat-content">
-                                    <div class="stat-label" data-i18n="stats.locations_today">Vị Trí Hôm Nay</div>
-                                    <div class="stat-value" id="stat-locations">0</div>
-                                </div>
-                            </div>
-
-                            <div class="stat-card gradient-green">
-                                <div class="stat-icon">
-                                    <i class="fas fa-route"></i>
-                                </div>
-                                <div class="stat-content">
-                                    <div class="stat-label" data-i18n="stats.distance_today">Quãng Đường</div>
-                                    <div class="stat-value" id="stat-distance">0 km</div>
-                                </div>
-                            </div>
-
-                            <div class="stat-card gradient-orange">
-                                <div class="stat-icon">
-                                    <i class="fas fa-clock"></i>
-                                </div>
-                                <div class="stat-content">
-                                    <div class="stat-label" data-i18n="stats.active_time">Thời Gian Hoạt Động</div>
-                                    <div class="stat-value" id="stat-active-time">0h</div>
-                                </div>
-                            </div>
-
-                            <div class="stat-card gradient-red">
-                                <div class="stat-icon">
-                                    <i class="fas fa-exclamation-triangle"></i>
-                                </div>
-                                <div class="stat-content">
-                                    <div class="stat-label" data-i18n="stats.alerts_today">Cảnh Báo</div>
-                                    <div class="stat-value" id="stat-alerts">0</div>
-                                </div>
-                            </div>
+                <!-- Quick Stats Row -->
+                <div class="stats-row">
+                    <div class="stat-card gradient-blue">
+                        <div class="stat-icon">
+                            <i class="fas fa-map-marker-alt"></i>
                         </div>
+                        <div class="stat-content">
+                            <div class="stat-label" data-i18n="stats.locations_today">Vị Trí Hôm Nay</div>
+                            <div class="stat-value" id="stat-locations">0</div>
+                        </div>
+                    </div>
 
-                        <!-- Live Map Panel -->
-                        <div class="panel map-panel-large">
+                    <div class="stat-card gradient-green">
+                        <div class="stat-icon">
+                            <i class="fas fa-route"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-label" data-i18n="stats.distance_today">Quãng Đường</div>
+                            <div class="stat-value" id="stat-distance">0 km</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card gradient-orange">
+                        <div class="stat-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-label" data-i18n="stats.active_time">Thời Gian Hoạt Động</div>
+                            <div class="stat-value" id="stat-active-time">0h</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card gradient-red">
+                        <div class="stat-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-label" data-i18n="stats.alerts_today">Cảnh Báo</div>
+                            <div class="stat-value" id="stat-alerts">0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Content Grid -->
+                <div class="main-grid">
+                    <!-- Left Column: Map + Route -->
+                    <div class="grid-left">
+                        <!-- Map Panel -->
+                        <div class="panel map-panel">
                             <div class="panel-header">
                                 <h3 class="panel-title">
                                     <i class="fas fa-map"></i>
-                                    <span data-i18n="map.title">Bản Đồ Vị Trí Trực Tiếp</span>
+                                    <span data-i18n="map.title">Bản Đồ GPS</span>
                                 </h3>
                                 <div class="panel-actions">
                                     <button class="btn-icon-panel" onclick="centerMap()" data-i18n-title="button.center_map">
@@ -211,19 +183,11 @@
                             </div>
                             <div class="panel-body map-panel-body">
                                 <div id="map" class="map-container"></div>
-
-                                <!-- Map Overlay Controls -->
-                                <div class="map-overlay-controls">
-                                    <button class="map-control-btn primary" onclick="fetchLocationDataManual()">
-                                        <i class="fas fa-location-arrow"></i>
-                                        <span data-i18n="button.get_gps">Lấy GPS</span>
-                                    </button>
-                                </div>
                             </div>
                         </div>
 
-                        <!-- Route History -->
-                        <div class="panel route-history-panel">
+                        <!-- Route History Panel -->
+                        <div class="panel">
                             <div class="panel-header">
                                 <h3 class="panel-title">
                                     <i class="fas fa-route"></i>
@@ -248,9 +212,10 @@
                         </div>
                     </div>
 
-                    <div class="content-column secondary-column">
+                    <!-- Right Column: Device + Analytics + Logs -->
+                    <div class="grid-right">
                         <!-- Device Status Panel -->
-                        <div class="panel device-status-panel">
+                        <div class="panel">
                             <div class="panel-header">
                                 <h3 class="panel-title">
                                     <i class="fas fa-mobile-alt"></i>
@@ -262,7 +227,7 @@
                                 </div>
                             </div>
                             <div class="panel-body">
-                                <div class="device-info-grid">
+                                <div class="device-info-list">
                                     <div class="info-item">
                                         <div class="info-icon">
                                             <i class="fas fa-id-card"></i>
@@ -317,47 +282,8 @@
                             </div>
                         </div>
 
-                        <!-- Analytics Snapshot -->
-                        <div class="panel analytics-overview-panel">
-                            <div class="panel-header">
-                                <h3 class="panel-title">
-                                    <i class="fas fa-chart-line"></i>
-                                    <span data-i18n="analytics.title">Phân Tích</span>
-                                </h3>
-                            </div>
-                            <div class="panel-body">
-                                <div class="analytics-grid">
-                                    <div class="analytics-item">
-                                        <span class="analytics-label" data-i18n="analytics.total_distance">Tổng Quãng Đường</span>
-                                        <span class="analytics-value">
-                                            <span id="analytics-total-distance">0</span>
-                                            <span class="analytics-unit" data-i18n="unit.km">km</span>
-                                        </span>
-                                    </div>
-                                    <div class="analytics-item">
-                                        <span class="analytics-label" data-i18n="analytics.total_time">Tổng Thời Gian</span>
-                                        <span class="analytics-value">
-                                            <span id="analytics-total-time">0</span>
-                                            <span class="analytics-unit" data-i18n="unit.hour">giờ</span>
-                                        </span>
-                                    </div>
-                                    <div class="analytics-item">
-                                        <span class="analytics-label" data-i18n="analytics.avg_speed">Tốc độ Trung Bình</span>
-                                        <span class="analytics-value">
-                                            <span id="analytics-average-speed">0</span>
-                                            <span class="analytics-unit" data-i18n="unit.kmh">km/h</span>
-                                        </span>
-                                    </div>
-                                    <div class="analytics-item">
-                                        <span class="analytics-label" data-i18n="analytics.trips">Chuyến đi</span>
-                                        <span class="analytics-value" id="analytics-total-trips">0</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
                         <!-- Activity Log -->
-                        <div class="panel activity-log-panel">
+                        <div class="panel">
                             <div class="panel-header">
                                 <h3 class="panel-title">
                                     <i class="fas fa-list"></i>
@@ -372,25 +298,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            </section>
-
-            <!-- Section: Map (Full View) -->
-            <section class="content-section" id="section-map">
-                <div class="panel fullscreen-panel">
-                    <div class="panel-header">
-                        <h3 class="panel-title">
-                            <i class="fas fa-map-marked-alt"></i>
-                            <span data-i18n="map.title">Bản Đồ Trực Tiếp</span>
-                        </h3>
-                        <div class="panel-actions">
-                            <button class="btn-modern primary" onclick="fetchLocationDataManual()">
-                                <i class="fas fa-sync"></i>
-                                <span data-i18n="button.refresh">Làm Mới</span>
-                            </button>
-                        </div>
-                    </div>
-                    <div id="map-fullscreen" class="map-container-full"></div>
                 </div>
             </section>
 
@@ -536,11 +443,19 @@
             }
         });
 
-        // Section navigation
+        // Section navigation with icon mapping
+        const sectionIcons = {
+            'overview': 'fa-th-large',
+            'map': 'fa-map-marked-alt',
+            'device': 'fa-mobile-alt',
+            'analytics': 'fa-chart-bar'
+        };
+
         document.querySelectorAll('.menu-item').forEach(item => {
             item.addEventListener('click', function(e) {
                 e.preventDefault();
                 const section = this.getAttribute('data-section');
+                if (!section) return;
                 
                 // Update active menu item
                 document.querySelectorAll('.menu-item').forEach(mi => mi.classList.remove('active'));
@@ -550,28 +465,54 @@
                 document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active'));
                 document.getElementById('section-' + section).classList.add('active');
                 
-                // Update breadcrumb
-                const breadcrumb = document.querySelector('.breadcrumb span');
-                breadcrumb.setAttribute('data-i18n', 'dashboard.' + section);
-                breadcrumb.textContent = i18n.t('dashboard.' + section);
+                // Update page title with icon
+                const titleIcon = document.getElementById('breadcrumb-icon');
+                const titleText = document.querySelector('.title-text');
+                if (titleIcon && sectionIcons[section]) {
+                    titleIcon.className = 'title-icon fas ' + sectionIcons[section];
+                }
+                if (titleText) {
+                    titleText.setAttribute('data-i18n', 'dashboard.' + section);
+                    titleText.textContent = i18n.t('dashboard.' + section);
+                }
+                
+                // Close sidebar on mobile after selection
+                if (window.innerWidth < 992) {
+                    const sidebar = document.querySelector('.sidebar-nav');
+                    if (sidebar) sidebar.classList.remove('open');
+                }
             });
         });
 
-        // Toggle notifications
-        function toggleNotifications() {
-            // Placeholder for notifications
-            alert(i18n.t('message.info') + ': No new notifications');
-        }
-
         // Toggle user menu
         function toggleUserMenu() {
-            document.getElementById('userDropdownMenu').classList.toggle('show');
+            const menu = document.getElementById('userDropdownMenu');
+            if (!menu) return;
+            
+            // Close language menu
+            document.getElementById('language-menu')?.classList.remove('show');
+            
+            menu.classList.toggle('show');
         }
 
-        // Close user menu when clicking outside
+        // Close dropdowns when clicking outside
         document.addEventListener('click', function(e) {
+            // Close language menu
+            if (!e.target.closest('.language-dropdown')) {
+                document.getElementById('language-menu')?.classList.remove('show');
+            }
+            
+            // Close user menu
             if (!e.target.closest('.user-profile')) {
-                document.getElementById('userDropdownMenu').classList.remove('show');
+                document.getElementById('userDropdownMenu')?.classList.remove('show');
+            }
+        });
+
+        // Close sidebar on window resize
+        window.addEventListener('resize', function() {
+            const sidebar = document.querySelector('.sidebar-nav');
+            if (window.innerWidth >= 992 && sidebar) {
+                sidebar.classList.remove('open');
             }
         });
     </script>

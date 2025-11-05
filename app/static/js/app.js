@@ -19,7 +19,12 @@ const AppState = {
     },
     geofences: [],
     routeHistory: [],
-    routePlaybackInterval: null
+    routePlaybackInterval: null,
+    notifications: [],
+    stats: {
+        locations: 0,
+        alerts: 0
+    }
 };
 
 // DOM Elements Cache - with null safety
@@ -139,6 +144,8 @@ function initApp() {
     startAutoRefresh();
     setupTheme();
     loadGeofences();
+    initKeyboardShortcuts();
+    updateSidebarStats();
     
     const activityMsg = typeof i18n !== 'undefined' ? i18n.t('activity.initialized') : 'Application initialized';
     logActivity(activityMsg, 'info');
@@ -263,6 +270,10 @@ async function fetchLocationData(useRealTime = false) {
             updateUI(data, useRealTime);
             setProgressBar(100);
             logActivity(`GPS data updated: ${data.latitude.toFixed(6)}, ${data.longitude.toFixed(6)}`, 'success');
+            
+            // Update stats
+            AppState.stats.locations++;
+            updateSidebarStats();
             
             // Check geofences
             checkGeofences(data.latitude, data.longitude);
@@ -484,6 +495,54 @@ function toggleFullscreen() {
 }
 
 /**
+ * Toggle map fullscreen (for map page)
+ */
+function toggleMapFullscreen() {
+    const mapContainer = document.querySelector('.map-main-container');
+    
+    if (!document.fullscreenElement && mapContainer) {
+        mapContainer.requestFullscreen().catch(err => {
+            console.error('Error attempting to enable fullscreen:', err);
+        });
+        logActivity('Map fullscreen enabled', 'info');
+    } else {
+        document.exitFullscreen();
+        logActivity('Map fullscreen disabled', 'info');
+    }
+}
+
+/**
+ * Change map layer
+ */
+function changeMapLayer(layerType) {
+    console.log('Changing map layer to:', layerType);
+    // The layer control is already built into the map initialization
+    // This function can be used for additional logic if needed
+    logActivity(`Map layer changed to ${layerType}`, 'info');
+}
+
+/**
+ * Update map page location display
+ */
+function updateMapPageLocation(latitude, longitude, timestamp) {
+    const mapLat = document.getElementById('map-lat');
+    const mapLon = document.getElementById('map-lon');
+    const mapTime = document.getElementById('map-time');
+    
+    if (mapLat) mapLat.textContent = latitude.toFixed(6);
+    if (mapLon) mapLon.textContent = longitude.toFixed(6);
+    if (mapTime) {
+        const dateTimeString = new Intl.DateTimeFormat('vi-VN', {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            timeZone: 'Asia/Ho_Chi_Minh'
+        }).format(new Date(timestamp));
+        mapTime.textContent = dateTimeString;
+    }
+}
+
+/**
  * Log activity to activity log panel
  */
 function logActivity(message, type = 'info') {
@@ -545,7 +604,183 @@ function toggleTheme() {
     document.documentElement.setAttribute('data-theme', newTheme);
     localStorage.setItem('theme', newTheme);
     
+    // Update theme icon
+    const themeIcon = document.getElementById('theme-icon');
+    if (themeIcon) {
+        themeIcon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+    }
+    
     logActivity(`Theme changed to ${newTheme} mode`, 'info');
+}
+
+/**
+ * Update sidebar stats
+ */
+function updateSidebarStats() {
+    const sidebarLocations = document.getElementById('sidebar-locations');
+    const sidebarAlerts = document.getElementById('sidebar-alerts');
+    
+    if (sidebarLocations) {
+        sidebarLocations.textContent = AppState.stats.locations;
+    }
+    if (sidebarAlerts) {
+        sidebarAlerts.textContent = AppState.stats.alerts;
+    }
+}
+
+/**
+ * Toggle notifications dropdown
+ */
+function toggleNotifications() {
+    const menu = document.getElementById('notification-menu');
+    if (!menu) return;
+    
+    // Close other dropdowns
+    closeAllDropdowns(['notification-menu']);
+    
+    menu.classList.toggle('show');
+    
+    // Load notifications if opening
+    if (menu.classList.contains('show')) {
+        loadNotifications();
+    }
+}
+
+/**
+ * Load notifications
+ */
+function loadNotifications() {
+    const notificationList = document.getElementById('notification-list');
+    if (!notificationList) return;
+    
+    if (AppState.notifications.length === 0) {
+        notificationList.innerHTML = `
+            <div class="notification-empty">
+                <i class="fas fa-bell-slash"></i>
+                <span data-i18n="notifications.empty">Không có thông báo</span>
+            </div>
+        `;
+        return;
+    }
+    
+    notificationList.innerHTML = AppState.notifications.map(notif => `
+        <div class="notification-item">
+            <div class="notification-icon ${notif.type}">
+                <i class="fas fa-${getNotificationIcon(notif.type)}"></i>
+            </div>
+            <div class="notification-content">
+                <div class="notification-title">${notif.title}</div>
+                <div class="notification-message">${notif.message}</div>
+                <div class="notification-time">${notif.time}</div>
+            </div>
+        </div>
+    `).join('');
+}
+
+/**
+ * Get notification icon based on type
+ */
+function getNotificationIcon(type) {
+    const icons = {
+        'info': 'info-circle',
+        'success': 'check-circle',
+        'warning': 'exclamation-triangle',
+        'error': 'times-circle'
+    };
+    return icons[type] || 'bell';
+}
+
+/**
+ * Clear notifications
+ */
+function clearNotifications() {
+    AppState.notifications = [];
+    loadNotifications();
+    document.getElementById('notification-count').textContent = '0';
+}
+
+/**
+ * Add notification
+ */
+function addNotification(title, message, type = 'info') {
+    const notification = {
+        title,
+        message,
+        type,
+        time: new Date().toLocaleTimeString('vi-VN')
+    };
+    
+    AppState.notifications.unshift(notification);
+    
+    // Update badge
+    const badge = document.getElementById('notification-count');
+    if (badge) {
+        badge.textContent = AppState.notifications.length;
+    }
+}
+
+/**
+ * Toggle search (placeholder for future feature)
+ */
+function toggleSearch() {
+    console.log('Search feature - Coming soon!');
+    addNotification('Search', 'Search feature coming soon!', 'info');
+}
+
+/**
+ * Close all dropdowns except specified
+ */
+function closeAllDropdowns(except = []) {
+    const dropdowns = ['language-menu', 'notification-menu', 'userDropdownMenu'];
+    
+    dropdowns.forEach(id => {
+        if (!except.includes(id)) {
+            const menu = document.getElementById(id);
+            if (menu) {
+                menu.classList.remove('show');
+            }
+        }
+    });
+}
+
+/**
+ * Initialize keyboard shortcuts
+ */
+function initKeyboardShortcuts() {
+    document.addEventListener('keydown', function(e) {
+        // Ctrl/Cmd + K: Search
+        if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+            e.preventDefault();
+            toggleSearch();
+        }
+        
+        // Ctrl/Cmd + B: Toggle sidebar
+        if ((e.ctrlKey || e.metaKey) && e.key === 'b') {
+            e.preventDefault();
+            toggleSidebar();
+        }
+        
+        // Ctrl/Cmd + T: Toggle theme
+        if ((e.ctrlKey || e.metaKey) && e.key === 't') {
+            e.preventDefault();
+            toggleTheme();
+        }
+        
+        // Escape: Close dropdowns and sidebar
+        if (e.key === 'Escape') {
+            closeAllDropdowns();
+            const sidebar = document.querySelector('.sidebar-nav');
+            if (sidebar && sidebar.classList.contains('open')) {
+                toggleSidebar();
+            }
+        }
+    });
+    
+    console.log('⌨️ Keyboard shortcuts initialized');
+    console.log('  Ctrl+K: Search');
+    console.log('  Ctrl+B: Toggle Sidebar');
+    console.log('  Ctrl+T: Toggle Theme');
+    console.log('  Esc: Close menus');
 }
 
 // ============= SMART FEATURES =============
